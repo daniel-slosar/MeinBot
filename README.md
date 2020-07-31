@@ -1,5 +1,9 @@
-#                                                                                     MeinBot
+MeinBot
 
+
+
+
+![Discord](https://img.shields.io/discord/515156152066244635)
 
 
 # Overview
