@@ -1,0 +1,8 @@
+discord 
+IMDbPY
+qrcode
+wikipedia
+google
+covid
+datetime	
+googletrans

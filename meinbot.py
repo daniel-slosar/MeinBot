@@ -12,6 +12,7 @@ import traceback
 import itertools
 import random
 import imdb
+import json
 import wikipedia
 import textwrap
 import qrcode
@@ -49,17 +50,20 @@ def community_report(guild):
 
 
 @client.command()
+async def ping(ctx):
+    embed = discord.Embed(colour=0x520081, title="Ping")
+    embed.add_field(name="Latency:", value=client.latency)
+    await ctx.send(embed=embed)
+
+
+@client.command()
 async def repeat(ctx, *, msng):
-    emoji = '\N{THUMBS UP SIGN}'
     if msng == "I\'m stupid":
         await ctx.send("Yeah, we know..")
-        await message.add_reaction(emoji)
     elif msng == "I suck dicks":
         await ctx.send("Yes you do!")
-
     else:
         await ctx.send(msng)
-        await message.add_reaction(emoji)
 
 @repeat.error
 async def repeat_error(ctx, error):
@@ -132,7 +136,7 @@ async def google_error(ctx, error):
 @client.command(aliases=['w'])
 async def wiki(ctx, *, question):
     try:
-        answer = wikipedia.summary(question)
+        a = wikipedia.summary(question)
         if len(a) <= 1023:
             embed = discord.Embed(colour=0x520081)
             embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
@@ -148,7 +152,7 @@ async def wiki(ctx, *, question):
             await ctx.send(embed=embed)
 
         else: 
-            a1 = textwrap.wrap(answer, 1024)
+            a1 = textwrap.wrap(a, 1024)
             embed = discord.Embed(colour=0x520081)
             embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
             embed.add_field(name="Wikipedia", value = a1[0])
@@ -201,18 +205,6 @@ async def days(ctx, days):
 async def days_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send(f"```css\nYou need to specify a number! (.days 365)```")
-
-
-@client.command()
-async def time(ctx):
-    tmp1 = datetime.datetime.now()
-    tme = tmp1.strftime(f"**%H:%M:%S.%f**")
-    tmf = tmp1.strftime(f"**%A %d/%B/%Y**")
-    embed = discord.Embed(colour=0x520081)
-    embed.set_thumbnail(url="https://www.7pace.com/wp-content/uploads/2018/02/cover-time.png")
-    embed.add_field(name="Time:", value=tme, inline=False)
-    embed.add_field(name="Date:", value=tmf, inline=False)
-    await ctx.send(embed=embed)
 
 
 @client.command()
