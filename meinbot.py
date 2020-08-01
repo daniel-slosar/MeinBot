@@ -1,7 +1,3 @@
-# id 573091512066375690
-# token NTczMDkxNTEyMDY2Mzc1Njkw.XMlzkQ.R2OTwor5q8bHLWK1cf6B_t2zucw
-# 522304
-# https://discordapp.com/oauth2/authorize?client_id=573091512066375690&scope=bot&permissions=522304
 import asyncio  
 import time
 import datetime
@@ -32,6 +28,8 @@ from googlesearch import search
 import instaloader
 
 client = commands.Bot(command_prefix = '.')
+
+token = open("token.txt", "r").read()
 
 def community_report(guild):
     online = 0
@@ -213,7 +211,7 @@ async def corona(ctx, krajina, member: discord.Member = None):
     member = ctx.author if not member else member
     try:
         covid = Covid()
-        countries = covid.list_countries()
+        #countries = covid.list_countries()
         cases_corona = covid.get_status_by_country_name(krajina)
         css_crn0 = json.dumps(cases_corona)
         country0 = css_crn0.split()[3]#italy
@@ -460,5 +458,5 @@ async def exit(ctx):
     await client.close()
 
 
-client.run("NTczMDkxNTEyMDY2Mzc1Njkw.XxhxSg.4CZNfzDuEmE8iqVuytYdpOlLySM")
+client.run(token)
 
