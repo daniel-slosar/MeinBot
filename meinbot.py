@@ -29,7 +29,7 @@ import instaloader
 
 client = commands.Bot(command_prefix = '.')
 
-token = open("token.txt", "r").read()
+token = open("D:\\Python\\MeinBot\\token.txt", "r").read()
 
 def community_report(guild):
     online = 0
