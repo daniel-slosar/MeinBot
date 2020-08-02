@@ -6,3 +6,4 @@ google
 covid
 datetime	
 googletrans
+instaloader

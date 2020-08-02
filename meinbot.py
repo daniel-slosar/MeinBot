@@ -13,7 +13,6 @@ import wikipedia
 import textwrap
 import qrcode
 import shutil
-from timeit import default_timer
 from googletrans import Translator
 from covid import Covid
 from discord.ext import commands
