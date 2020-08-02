@@ -10,3 +10,7 @@ MeinBot is a discord bot that can make almost anything! Well.. not anything but 
 
 
 # Installation
+
+```bash
+$ pip install selenium
+```
