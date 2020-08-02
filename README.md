@@ -7,7 +7,7 @@
 # Overview
 
 MeinBot is a discord bot that can make almost anything! Well.. not anything but still he can do a lots of stuff.
-
+[Invitation link][link]
 
 # Installation
 
@@ -17,3 +17,5 @@ $ git clone https://github.com/Daydrea404/MeinBot.git
 $ pip install -r requirements.txt
 ```
 
+
+[link]: https://discord.com/api/oauth2/authorize?client_id=573091512066375690&permissions=8&scope=bot

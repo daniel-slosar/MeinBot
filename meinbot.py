@@ -392,6 +392,7 @@ async def on_member_join(member):
     embed.timestamp = datetime.datetime.utcnow()
     channel = client.get_channel(id=715866321966989312)
     await channel.send(embed=embed)
+    await channel.send("..command")
 
 
 @client.command()
