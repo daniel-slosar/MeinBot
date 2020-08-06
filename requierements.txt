@@ -7,3 +7,4 @@ covid
 datetime	
 googletrans
 instaloader
+lyricsgenius

@@ -25,6 +25,8 @@ from itertools import cycle
 from asyncio import sleep
 from googlesearch import search
 import instaloader
+import lyricsgenius
+import math
 
 client = commands.Bot(command_prefix = '.')
 
@@ -44,6 +46,59 @@ def community_report(guild):
             idle += 1
 
     return online, idle, offline
+
+
+
+@client.command()
+async def lyrics(ctx, artist, *, music):
+	genius = lyricsgenius.Genius("Hr1b8WbbwpWsZgaygzQEdhc8DGNmm2j45a98_-zE2Ya-0zRO3wJRqRZc4-zMuqjl")
+	song = genius.search_song(music, artist)
+	per_page = 1000
+	pages = math.ceil(len(song.lyrics) / per_page)
+	cur_page = 1
+	chunk = song.lyrics[:per_page]
+	embed = discord.Embed(title=f"{music}", colour=0x520081)
+	embed.add_field(name=f"by {artist}\n", value=chunk, inline=False)
+	embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+	message = await ctx.send(embed=embed)
+	#message = await ctx.send(f"Page {cur_page}/{pages}:\n{chunk}")
+	# TODO: maybe if we split chunk to 2 then embed.add_field() = more per_page
+	await message.add_reaction("◀️")
+	await message.add_reaction("▶️")
+	active = True
+	
+	def check(reaction, user):
+		return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+
+	while active:
+		try:
+			reaction, user = await client.wait_for("reaction_add", timeout=60, check=check)
+			
+			if str(reaction.emoji) == "▶️" and cur_page != pages:
+				cur_page += 1
+				if cur_page != pages:
+					chunk = song.lyrics[(cur_page-1)*per_page:cur_page*per_page]
+				else:
+					chunk = song.lyrics[(cur_page-1)*per_page:]
+				embed = discord.Embed(title=f"{music}", colour=0x520081)
+				embed.add_field(name=f"by {artist}\n", value=chunk, inline=False)
+				embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+				await message.edit(embed=embed)
+				await message.remove_reaction(reaction, user)
+				
+			elif str(reaction.emoji) == "◀️" and cur_page > 1:
+				cur_page -= 1
+				chunk = song.lyrics[(cur_page-1)*per_page:cur_page*per_page]
+				embed = discord.Embed(title=f"{music}", colour=0x520081)
+				embed.add_field(name=f"by {artist}\n", value=chunk, inline=False)
+				embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+				await message.edit(embed=embed)
+				#await message.edit(content=f"Page {cur_page}/{pages}:\n{chunk}")
+				await message.remove_reaction(reaction, user)
+				
+		except asyncio.TimeoutError:
+			await message.delete()
+			active = False
 
 
 @client.command()
