@@ -48,7 +48,6 @@ def community_report(guild):
     return online, idle, offline
 
 
-
 @client.command()
 async def lyrics(ctx, artist, *, music):
 	genius = lyricsgenius.Genius("Hr1b8WbbwpWsZgaygzQEdhc8DGNmm2j45a98_-zE2Ya-0zRO3wJRqRZc4-zMuqjl")
@@ -57,12 +56,11 @@ async def lyrics(ctx, artist, *, music):
 	pages = math.ceil(len(song.lyrics) / per_page)
 	cur_page = 1
 	chunk = song.lyrics[:per_page]
-	embed = discord.Embed(title=f"{music}", colour=0x520081)
-	embed.add_field(name=f"by {artist}\n", value=chunk, inline=False)
+	embed = discord.Embed(colour=0x520081)
+	embed.add_field(name=f"{music} by {artist}", value=chunk, inline=False)
 	embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
 	message = await ctx.send(embed=embed)
 	#message = await ctx.send(f"Page {cur_page}/{pages}:\n{chunk}")
-	# TODO: maybe if we split chunk to 2 then embed.add_field() = more per_page
 	await message.add_reaction("◀️")
 	await message.add_reaction("▶️")
 	active = True
@@ -71,34 +69,38 @@ async def lyrics(ctx, artist, *, music):
 		return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
 	while active:
-		try:
-			reaction, user = await client.wait_for("reaction_add", timeout=60, check=check)
+		reaction, user = await client.wait_for("reaction_add", check=check)
 			
-			if str(reaction.emoji) == "▶️" and cur_page != pages:
-				cur_page += 1
-				if cur_page != pages:
-					chunk = song.lyrics[(cur_page-1)*per_page:cur_page*per_page]
-				else:
-					chunk = song.lyrics[(cur_page-1)*per_page:]
-				embed = discord.Embed(title=f"{music}", colour=0x520081)
-				embed.add_field(name=f"by {artist}\n", value=chunk, inline=False)
-				embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
-				await message.edit(embed=embed)
-				await message.remove_reaction(reaction, user)
-				
-			elif str(reaction.emoji) == "◀️" and cur_page > 1:
-				cur_page -= 1
+		if str(reaction.emoji) == "▶️" and cur_page != pages:
+			cur_page += 1
+
+			if cur_page != pages:
 				chunk = song.lyrics[(cur_page-1)*per_page:cur_page*per_page]
-				embed = discord.Embed(title=f"{music}", colour=0x520081)
-				embed.add_field(name=f"by {artist}\n", value=chunk, inline=False)
-				embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
-				await message.edit(embed=embed)
-				#await message.edit(content=f"Page {cur_page}/{pages}:\n{chunk}")
-				await message.remove_reaction(reaction, user)
+			else:
+				chunk = song.lyrics[(cur_page-1)*per_page:]
+			
+			embed = discord.Embed(colour=0x520081)
+			embed.add_field(name=f"{music} by {artist}", value=chunk, inline=False)
+			embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+			await message.edit(embed=embed)
+			await message.remove_reaction(reaction, user)
 				
-		except asyncio.TimeoutError:
-			await message.delete()
-			active = False
+		elif str(reaction.emoji) == "◀️" and cur_page > 1:
+			cur_page -= 1
+			chunk = song.lyrics[(cur_page-1)*per_page:cur_page*per_page]
+			embed = discord.Embed(title=f"{music}", colour=0x520081)
+			embed.add_field(name=f"{music} by {artist}", value=chunk, inline=False)
+			embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+			await message.edit(embed=embed)
+			#await message.edit(content=f"Page {cur_page}/{pages}:\n{chunk}")
+			await message.remove_reaction(reaction, user)
+
+
+@lyrics.error
+async def lyrics_error(ctx, error):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
+        embed = discord.Embed(title="Error", description=f"You need to specify song and artist `.lyrics \"Dua Lipa\"`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -120,7 +122,8 @@ async def repeat(ctx, *, msng):
 @repeat.error
 async def repeat_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nWTF should I repeat? (.repeat I\'m stupid)```")
+        embed = discord.Embed(title="Error", description=f"What should I repeat? `.repeat Hello!`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -135,7 +138,8 @@ async def ig(ctx, profile):
 @ig.error
 async def ig_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nNeed some ig profile name (.ig selenagomez)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify instagram profile `.ig selenagomez`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -157,7 +161,8 @@ async def q(ctx, *, question):
 @q.error
 async def q_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nNeed some question mate.. (.q Am I sad?)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify question `.q Am I gay?`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -182,46 +187,70 @@ async def google(message,*, query):
 @google.error
 async def google_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nSearch on google with me! (.google Elon Musk)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify google search `.google Elon Musk`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command(aliases=['w'])
 async def wiki(ctx, *, question):
-    try:
-        a = wikipedia.summary(question)
-        if len(a) <= 1023:
-            embed = discord.Embed(colour=0x520081)
-            embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
-            embed.add_field(name="Wikipedia", value = a)
-            await ctx.send(embed=embed)
+	try:
+		a = wikipedia.summary(question)
+		per_page = 1000
+		pages = math.ceil(len(a) / per_page)
+		cur_page = 1
+		chunk = a[:per_page]
+		embed = discord.Embed(colour=0x520081)
+		embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
+		embed.add_field(name="Wikipedia", value = chunk)
+		embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+		message = await ctx.send(embed=embed)
+		await message.add_reaction("◀️")
+		await message.add_reaction("▶️")
+		active = True
+		
+		def check(reaction, user):
+			return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
-        elif 2048 > len(a) > 1024:
-            a1, a2 = a[:len(a)//2],a[len(a)//2:]
-            embed = discord.Embed(colour=0x520081)
-            embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
-            embed.add_field(name="Wikipedia", value = a1)
-            embed.add_field(name="** **", value = a2)
-            await ctx.send(embed=embed)
+		while active:
+			reaction, user = await client.wait_for("reaction_add", check=check)
+				
+			if str(reaction.emoji) == "▶️" and cur_page != pages:
+				cur_page += 1
 
-        else: 
-            a1 = textwrap.wrap(a, 1024)
-            embed = discord.Embed(colour=0x520081)
-            embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
-            embed.add_field(name="Wikipedia", value = a1[0])
-            embed.add_field(name="** **", value = a1[1])
-            embed.add_field(name="** **", value = a1[2])
-            await ctx.send(embed=embed)
-            
-    except Exception as e:
-        embed = discord.Embed(colour=0x520081)
-        embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
-        embed.add_field(name="I didn\'t find anything like that try: ", value= e)
-        await ctx.send(embed=embed)
+				if cur_page != pages:
+					chunk = a[(cur_page-1)*per_page:cur_page*per_page]
+				else:
+					chunk = a[(cur_page-1)*per_page:]
+				
+				embed = discord.Embed(colour=0x520081)
+				embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
+				embed.add_field(name="Wikipedia", value = chunk)
+				embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+				await message.edit(embed=embed)
+				await message.remove_reaction(reaction, user)
+					
+			elif str(reaction.emoji) == "◀️" and cur_page > 1:
+				cur_page -= 1
+				chunk = a[(cur_page-1)*per_page:cur_page*per_page]
+				embed = discord.Embed(colour=0x520081)
+				embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
+				embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+				embed.add_field(name="Wikipedia", value = chunk)
+				await message.edit(embed=embed)
+				#await message.edit(content=f"Page {cur_page}/{pages}:\n{chunk}")
+				await message.remove_reaction(reaction, user)
+				
+	except Exception as e:
+		embed = discord.Embed(colour=0x520081)
+		embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
+		embed.add_field(name="I didn\'t find anything like that try: ", value= e)
+		await ctx.send(embed=embed)
 
 @wiki.error
 async def wiki_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nLearn on wiki with me! (.wiki Adolf Hitler)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify wiki search `.wiki \"Donald Trump\"`", colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -231,7 +260,8 @@ async def clear(ctx, amount : int):
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nYou need to specify a number! (.clear 5)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify a number of messages to be deleted! `.clear 5`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -256,7 +286,8 @@ async def days(ctx, days):
 @days.error
 async def days_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nYou need to specify a number! (.days 365)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify number as days `.days 356`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -296,7 +327,8 @@ async def corona(ctx, krajina, member: discord.Member = None):
 @corona.error
 async def corona_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nYou need to specify a country! (.corona US)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify a country `.corona US`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
@@ -324,7 +356,8 @@ async def qr(ctx, *, data):
 @qr.error
 async def qr_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nYou need to specify some text (.qr youtube.com)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify text to be converted to QR CODE `.qr youtube.com`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command(aliases=['t', 'tr', 'trns'])
@@ -345,7 +378,8 @@ async def translate(ctx, word: str, scnd_l: str="en"):
 @translate.error
 async def translate_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f"```css\nI need some word to translate (.translate okno)```")
+        embed = discord.Embed(title="Error", description=f"You need to specify word to be translated `.translate Okno`",colour=0x520081)
+        await ctx.send(embed=embed)
 
 
 @client.command()
