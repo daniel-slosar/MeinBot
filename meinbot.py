@@ -27,6 +27,7 @@ from googlesearch import search
 import instaloader
 import lyricsgenius
 import math
+from google_currency import convert
 
 client = commands.Bot(command_prefix = '.')
 
@@ -47,6 +48,41 @@ def community_report(guild):
 
     return online, idle, offline
 
+
+@client.command()
+async def currency(ctx, amount, frm, to):
+	x = convert(frm, to, float(amount))
+	y = json.loads(x)
+	frm1 = y['from']
+	to1 = y['to']
+	amount1 = y['amount']
+	cnvrtd1 = y['converted']
+	embed = discord.Embed(colour=0x520081, title="Currency Converter")
+	embed.set_thumbnail(url="https://w7.pngwing.com/pngs/712/357/png-transparent-exchange-rate-currency-computer-icons-foreign-exchange-market-coin-coin-text-logo-exchange.png")
+	embed.add_field(name="Original:", value=f"{amount} {frm1}")
+	embed.add_field(name="Converted:", value=f"{amount1} {to1}")
+	await ctx.send(embed=embed)
+
+
+@currency.error
+async def currency_error(ctx, error):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
+        embed = discord.Embed(title="Error", description=f"You need to specify amount and currency from and currency to `.currency 10 eur usd`",colour=0x520081)
+        await ctx.send(embed=embed)
+
+@client.command()
+async def pi(ctx):
+    pi_num = '{:.{}f}'.format(math.pi, 31)
+    embed = discord.Embed(colour=0x520081)
+    embed.add_field(name="π number:", value=pi_num)
+    await ctx.send(embed=embed)
+
+@client.command()
+async def e(ctx):
+    e = '{:.{}f}'.format(math.e, 31)
+    embed = discord.Embed(colour=0x520081)
+    embed.add_field(name="e number:", value=e)
+    await ctx.send(embed=embed)
 
 @client.command()
 async def lyrics(ctx, artist, *, music):
