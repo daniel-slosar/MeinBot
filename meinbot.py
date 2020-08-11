@@ -557,6 +557,11 @@ async def on_message(message):  # event that happens per any message.
 
 
 
+    if "pornhub" in message.content.lower():
+        await message.channel.send("Rate this porn you watched! I\'ll give it..")
+        emoji = '<:nine:>'
+        await message.add_reaction(emoji)
+
 
     if "<@!724654875157201066>" in message.content.lower():
         emoji = '<:jarko:719935424696418446>'
