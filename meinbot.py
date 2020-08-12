@@ -559,8 +559,20 @@ async def on_message(message):  # event that happens per any message.
 
     if "pornhub" in message.content.lower():
         await message.channel.send("Rate this porn you watched! I\'ll give it..")
-        emoji = '<:nine:>'
+        random_emojis = ('0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟','💯','👌🏾')
+        time.sleep(2)
+        emoji = random.choice(random_emojis)
         await message.add_reaction(emoji)
+
+        def check(reaction, user):
+            return user == message.author and str(reaction.emoji) in ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟', '💯','👌🏾']
+        
+        try:
+        	reaction, user = await client.wait_for("reaction_add", timeout=60, check=check)
+        except asyncio.TimeoutError:
+            await message.channel.purge(limit=1)
+        else:
+            await message.channel.purge(limit=1)
 
 
     if "<@!724654875157201066>" in message.content.lower():
