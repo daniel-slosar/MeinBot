@@ -28,6 +28,7 @@ import instaloader
 import lyricsgenius
 import math
 from google_currency import convert
+import platform
 
 client = commands.Bot(command_prefix = '.')
 
@@ -48,6 +49,18 @@ def community_report(guild):
 
     return online, idle, offline
 
+@client.command()	
+async def info(ctx):
+    pltf = platform.platform()
+    member = client.get_user(573091512066375690)
+    embed = discord.Embed(colour=0x520081, title="INFO",timestamp=ctx.message.created_at)
+    embed.set_thumbnail(url=member.avatar_url)
+    embed.add_field(name="Name: ", value="MeinBot#1050")
+    embed.add_field(name="Creation date: ", value="01 May 2019")
+    embed.add_field(name="Created by: ", value="01001100#2651")
+    embed.add_field(name="Running on: ", value=pltf)
+    embed.add_field(name="Help command:", value=f"`.command`")
+    await ctx.send(embed=embed)
 
 @client.command()
 async def currency(ctx, amount, frm, to):
@@ -301,12 +314,6 @@ async def clear_error(ctx, error):
 
 
 @client.command()
-async def chat(ctx):
-	await ctx.author.send('Ooh..I heard you wanted to talk to me?')
-	await ctx.author.send('So what\'s the problem?\nYou can still chill out on this site: https://www.pornhub.com')
-
-
-@client.command()
 async def days(ctx, days):
     now = datetime.datetime.now()
     thousandDays = datetime.timedelta(int(days))
@@ -425,7 +432,7 @@ async def rn(ctx,s: int = 1 , e: int = 99):
 
 
 @client.command()
-async def yon(ctx, n: int=1):
+async def yn(ctx, n: int=1):
     choices = ['Yes', 'No']
     for i in range(n):
         await ctx.send(f"```css\n{random.choice(choices)}```")
@@ -509,6 +516,24 @@ async def on_ready():
 
 
 @client.event
+async def on_guild_join(guild):
+    for channel in guild.text_channels:
+        if channel.permissions_for(guild.me).send_messages:
+            pltf = platform.platform()
+            member = client.get_user(573091512066375690)
+            await channel.send("Hi, my name is MeinBot. I\'m your new bot!")
+            embed = discord.Embed(colour=0x520081, title="INFO")
+            embed.set_thumbnail(url=member.avatar_url)
+            embed.add_field(name="Name: ", value="MeinBot#1050")
+            embed.add_field(name="Creation date: ", value="01 May 2019")
+            embed.add_field(name="Created by: ", value="01001100#2651")
+            embed.add_field(name="Running on: ", value=pltf)
+            embed.add_field(name="Help command: ", value=f"`.command`")
+            await channel.send(embed=embed)
+            break
+
+
+@client.event
 async def on_member_join(member):
     embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
     embed.set_thumbnail(url=f"{member.avatar_url}")
@@ -526,7 +551,6 @@ async def command(ctx):
     embed.add_field(name=".members", value="Shows how many members are on the server")
     embed.add_field(name=".status", value="Shows online/offline/idle status")
     embed.add_field(name=".userinfo", value="Shows info about user (.userinfo @user)")
-    embed.add_field(name=".chat", value="Starts chatting with you in private")
     embed.add_field(name=".clear", value="Delete certain amount of messages (.clear 5)")
     embed.add_field(name=".q", value="Ask your troubling questions and bot will reply")
     embed.add_field(name=".exit", value="Turn off the bot")
