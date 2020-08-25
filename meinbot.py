@@ -33,6 +33,7 @@ import platform
 client = commands.Bot(command_prefix = '.')
 
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read()
+token_genius = open(":\\Python\\MeinBot\\genius_token.txt", "r").read()
 
 def community_report(guild):
     online = 0
@@ -99,7 +100,7 @@ async def e(ctx):
 
 @client.command()
 async def lyrics(ctx, artist, *, music):
-	genius = lyricsgenius.Genius("Hr1b8WbbwpWsZgaygzQEdhc8DGNmm2j45a98_-zE2Ya-0zRO3wJRqRZc4-zMuqjl")
+	genius = lyricsgenius.Genius(token_genius)
 	song = genius.search_song(music, artist)
 	per_page = 1000
 	pages = math.ceil(len(song.lyrics) / per_page)
@@ -535,15 +536,17 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_member_join(member):
+    role = get(member.guild.roles, name="Peasant")
+    await member.add_roles(role)
+    channel = client.get_channel(id=747512532930920588)
     embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
     embed.set_thumbnail(url=f"{member.avatar_url}")
     embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
     embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
+    embed.add_field(name=f"Your role: ", value=role)
     embed.timestamp = datetime.datetime.utcnow()
-    channel = client.get_channel(id=715866321966989312)
     await channel.send(embed=embed)
-    await channel.send("..command")
-
+    
 
 @client.command()
 async def command(ctx):
@@ -553,9 +556,7 @@ async def command(ctx):
     embed.add_field(name=".userinfo", value="Shows info about user (.userinfo @user)")
     embed.add_field(name=".clear", value="Delete certain amount of messages (.clear 5)")
     embed.add_field(name=".q", value="Ask your troubling questions and bot will reply")
-    embed.add_field(name=".exit", value="Turn off the bot")
     embed.add_field(name=".quote", value="Gives you a random quote")
-    embed.add_field(name=".time", value="Prints out time and date")
     embed.add_field(name=".corona", value="Gives you corona update(.corona US/Slovakia/Czechia)")
     embed.add_field(name=".countries", value="Gives you link to all countries")
     embed.add_field(name=".translate", value="Translator from detected language to english (.translate Okno)")
