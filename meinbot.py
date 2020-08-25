@@ -54,14 +54,14 @@ def community_report(guild):
 
 @client.command()
 async def help(ctx):
-	embed=discord.Embed(title="MeinBot Help",url="https://google.com", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
+	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://google.com", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
 	embed.set_thumbnail(url=client.user.avatar_url)
 	await ctx.send(embed=embed)
 
 @client.command()
 async def avatar(ctx, member: discord.Member = None):
 	member = ctx.author if not member else member
-	embed=discord.Embed(title=	"AVATAR")
+	embed=discord.Embed(colour=0x520081,title="AVATAR")
 	embed.set_image(url=member.avatar_url)
 	await ctx.send(embed=embed)
 
