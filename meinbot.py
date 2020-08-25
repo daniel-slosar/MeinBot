@@ -31,10 +31,12 @@ from google_currency import convert
 import platform
 
 client = commands.Bot(command_prefix = '.')
+client.remove_command('help')
 
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read()
 token_genius = open(":\\Python\\MeinBot\\genius_token.txt", "r").read()
 
+# TODO: remove help and add new help like rythm and create meinbot.githubpages.io
 def community_report(guild):
     online = 0
     idle = 0
@@ -50,17 +52,29 @@ def community_report(guild):
 
     return online, idle, offline
 
+@client.command()
+async def help(ctx):
+	embed=discord.Embed(title="MeinBot Help",url="https://google.com", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
+	embed.set_thumbnail(url=client.user.avatar_url)
+	await ctx.send(embed=embed)
+
+@client.command()
+async def avatar(ctx, member: discord.Member = None):
+	member = ctx.author if not member else member
+	embed=discord.Embed(title=	"AVATAR")
+	embed.set_image(url=member.avatar_url)
+	await ctx.send(embed=embed)
+
 @client.command()	
 async def info(ctx):
     pltf = platform.platform()
-    member = client.get_user(573091512066375690)
     embed = discord.Embed(colour=0x520081, title="INFO",timestamp=ctx.message.created_at)
-    embed.set_thumbnail(url=member.avatar_url)
+    embed.set_thumbnail(url=client.user.avatar_url)
     embed.add_field(name="Name: ", value="MeinBot#1050")
     embed.add_field(name="Creation date: ", value="01 May 2019")
     embed.add_field(name="Created by: ", value="01001100#2651")
     embed.add_field(name="Running on: ", value=pltf)
-    embed.add_field(name="Help command:", value=f"`.command`")
+    embed.add_field(name="Help command:", value=f"`.help`")
     await ctx.send(embed=embed)
 
 @client.command()
