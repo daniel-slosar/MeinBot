@@ -36,7 +36,7 @@ client.remove_command('help')
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read()
 token_genius = open(":\\Python\\MeinBot\\genius_token.txt", "r").read()
 
-# TODO: remove help and add new help like rythm and create meinbot.githubpages.io
+
 def community_report(guild):
     online = 0
     idle = 0
@@ -51,6 +51,53 @@ def community_report(guild):
             idle += 1
 
     return online, idle, offline
+
+@client.command()
+@commands.has_role("FÜHRER")
+async def kick(ctx, member: discord.Member, *, reason=None):
+    await member.kick(reason=reason)
+    await ctx.send(f"{member} has been kicked")
+
+@kick.error
+async def kick_error(ctx, error):
+    if isinstance(error, commands.CommandInvokeError):
+        embed = discord.Embed(title="Kick Error", description=f"Missing Permission!",colour=0x520081)
+        await ctx.send(embed=embed)
+
+
+@client.command()
+@commands.has_role("FÜHRER")
+async def ban(ctx, member: discord.Member, *, reason=None):
+    await member.ban(reason=reason)
+    await ctx.send(f"{member} has been kicked")
+
+@kick.error
+async def ban_error(ctx, error):
+    if isinstance(error, commands.CommandInvokeError):
+        embed = discord.Embed(title="Ban Error", description=f"Missing Permission!",colour=0x520081)
+        await ctx.send(embed=embed)
+
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    member == client.get_user(519894723352199198)
+    if before.channel is None and after.channel is not None:
+        if after.channel.id == 515158430751784960 and member == client.get_user(519894723352199198):
+            user = client.get_user(373934947091742721)
+            await user.send(f"{member} just joined the Room 1!")
+            
+        elif after.channel.id == 713819586482405496 and member == client.get_user(519894723352199198):
+            user = client.get_user(373934947091742721)
+            await user.send(f"{member} just joined the Room 2!")
+
+        elif after.channel.id == 699342733487243291 and member == client.get_user(519894723352199198):
+            user = client.get_user(373934947091742721)
+            await user.send(f"{member} just joined the Room 3!")
+
+    if after.channel is None and member == client.get_user(519894723352199198):
+        user = client.get_user(373934947091742721)
+        await user.send(f"{member} just left the room!\n----------------------------")
+
 
 @client.command()
 async def help(ctx):
@@ -380,7 +427,7 @@ async def corona(ctx, krajina, member: discord.Member = None):
         embed.add_field(name="Info: ", value="https://www.who.int/")
         await ctx.channel.send(embed=embed)
     except:
-        await ctx.channel.send("Cannot find this country.Try using .commands")
+        await ctx.channel.send("Cannot find this country.Try using .countries")
 
 @corona.error
 async def corona_error(ctx, error):
@@ -515,13 +562,12 @@ async def userinfo(ctx, member: discord.Member = None):
 
     await ctx.send(embed=embed)
 
-'''
 @client.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        #await ctx.send(f"Well something went wrong! try `.commands`")
-        await ctx.send("Well something went wrong! YOU fucked up..Again!")
-'''
+async def on_command_error(ctx,error):
+    if isinstance(error, commands.CommandNotFound):
+        embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.help`",colour=0x520081)
+        await ctx.send(embed=embed)
+
 
 @client.event #event decorator/wrapper
 async def on_ready():
