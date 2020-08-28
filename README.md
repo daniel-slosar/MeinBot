@@ -1,6 +1,7 @@
 
 <div align="center">
-<p style="font-size:35px;font-weight:600;">MeinBot</p>
+
+# MeinBot
 
 
 <img align="center" src="https://southpark-online.nl/assets/images/clips/cartmans-rally.jpg">
@@ -21,9 +22,7 @@
 
 <div align="center">
 
-<p style="font-size:35px;font-weight:600;">Overview</p>
-
----
+# Overview
 
 </div>
 
@@ -44,11 +43,11 @@ MeinBot is a discord bot that can make almost anything! Well.. not anything but 
 
 <div align="center">
 
-<p style="font-size:35px;font-weight:600;">Installation</p>
+# Installation
 
 </div>
 
----
+
 
 ```py
 $ git clone https://github.com/Daydrea404/MeinBot.git
