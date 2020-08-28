@@ -24,14 +24,14 @@
 
 # Overview
 
-</div>
+
 
 MeinBot is a discord bot that can make almost anything! Well.. not anything but still he can do a lots of stuff.
 
 
-<div align="center">
+![Invitation Link](https://img.shields.io/badge/Invitation%20link-blueviolet?style=for-the-badge&link=https://discord.com/api/oauth2/authorize?client_id=573091512066375690&permissions=8&scope=bot&logoColor=blueviolet)
 
-<button name="button" style="background-color: #8a2be2;border: none;color: white;padding: 11px 30px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;font-weight:790;" onclick="http://www.google.com">INVITATION LINK</button>
+
 
 
 </div>
