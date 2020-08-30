@@ -57,5 +57,17 @@ $ git clone https://github.com/Daydrea404/MeinBot.git
 $ pip install -r requirements.txt
 ```
 
+</br>
+</br>
 
-[link]: https://discord.com/api/oauth2/authorize?client_id=573091512066375690&permissions=8&scope=bot
+
+<div align="center">
+
+# Commands
+
+Commands | Usage
+------------ | -------------
+.lyrics | Shows lyrics of wanted song
+.members | Shows number of members
+
+</div>

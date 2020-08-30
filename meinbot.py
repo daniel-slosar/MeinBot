@@ -45,7 +45,7 @@ def community_report(guild):
     for m in guild.members:
         if str(m.status) == "online":
             online += 1
-        if str(m.status) == "offline":
+        elif str(m.status) == "offline":
             offline += 1
         else:
             idle += 1
@@ -504,15 +504,9 @@ async def yn(ctx, n: int=1):
 async def members(message):
     global meinbot_guild
     meinbot_guild = client.get_guild(515156152066244635)
-    await message.channel.send(f"```py\nThere are {meinbot_guild.member_count} members on this server```")
-
-
-@client.command()
-async def status(message):
-    global meinbot_guild
-    meinbot_guild = client.get_guild(515156152066244635)
     online, idle, offline = community_report(meinbot_guild)
-    await message.channel.send(f"```py\nMembers\nOnline: {online}\nIdle/Busy: {idle}\nOffline: {offline}```")
+    embed = discord.Embed(colour=0x520081,title="Members",description=f":green_circle: Online: {online} \n\n :red_circle: Busy/Idle: {idle} \n\n :white_circle:  Offline: {offline} \n\n :8ball: Server Count: {meinbot_guild.member_count} ")
+    await message.channel.send(embed=embed)
 
 
 @client.command()
