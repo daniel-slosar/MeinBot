@@ -396,43 +396,42 @@ async def days_error(ctx, error):
 
 
 @client.command()
-async def corona(ctx, krajina, member: discord.Member = None):
+async def corona(ctx, krajina):
     global meinbot_guild
-    member = ctx.author if not member else member
     try:
-        covid = Covid()
-        #countries = covid.list_countries()
+        covid = Covid(source="worldometers")
         cases_corona = covid.get_status_by_country_name(krajina)
-        css_crn0 = json.dumps(cases_corona)
-        country0 = css_crn0.split()[3]#italy
-        country1 = country0.replace('",', '')
-        country = country1.replace('"', '')
-        confirmed0 = css_crn0.split()[5]#228006conf
-        confirmed = confirmed0.replace(',', '')
-        active0 = css_crn0.split()[7]#60960active
-        active = active0.replace(',', '')
-        deaths0 = css_crn0.split()[9]#32486deaths
-        deaths = deaths0.replace(',', '')
-        recovered0 = css_crn0.split()[11]#134recoverd
-        recovered = recovered0.replace(',', '')
+        country = cases_corona['country']
+        confirmed = cases_corona['confirmed']
+        new_cases = cases_corona['new_cases']
+        deaths = cases_corona['deaths']
+        recovered = cases_corona['recovered']
+        active = cases_corona['active']
+        critical = cases_corona['critical']
+        new_deaths = cases_corona['new_deaths']
+        total_tests = cases_corona['total_tests']
 
         embed = discord.Embed(title="COVID-19", colour=0x520081, timestamp=ctx.message.created_at)
         embed.set_thumbnail(url="https://d2v9ipibika81v.cloudfront.net/uploads/sites/193/covid19-cdc-unsplash-2.jpg") 
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.add_field(name="Country: ", value=country)
         embed.add_field(name="Confirmed: ", value=confirmed)
+        embed.add_field(name="Recovered: ", value=recovered)
         embed.add_field(name="Active: ", value=active)
         embed.add_field(name="Deaths: ", value=deaths)
-        embed.add_field(name="Recovered: ", value=recovered)
-        embed.add_field(name="Info: ", value="https://www.who.int/")
+        embed.add_field(name="New Cases: ", value=new_cases)
+        embed.add_field(name="New Deaths: ", value=new_deaths)
+        embed.add_field(name="Critical: ", value=critical)
+        embed.add_field(name="Total tests: ", value=total_tests)
+        embed.add_field(name="Info: ", value="https://www.worldometers.info/coronavirus/")
         await ctx.channel.send(embed=embed)
     except:
-        await ctx.channel.send("Cannot find this country.Try using .countries")
+        await ctx.channel.send(f"Cannot find this country, maybe try `.corona \"Dominican Republic\"` or try using `.countries`")
 
 @corona.error
 async def corona_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        embed = discord.Embed(title="Error", description=f"You need to specify a country `.corona US`",colour=0x520081)
+        embed = discord.Embed(title="Error", description=f"You need to specify a country `.corona USA`",colour=0x520081)
         await ctx.send(embed=embed)
 
 
