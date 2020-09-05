@@ -11,7 +11,7 @@
 
 
 
-![Discord](https://img.shields.io/discord/515156152066244635?style=for-the-badge&logo=discord&color=blueviolet&logoColor=blueviolet) ![discordpy](https://img.shields.io/badge/discord-py-blueviolet?style=for-the-badge&logo=discord&logoColor=blueviolet) ![discordbot](https://img.shields.io/badge/discord-bot-blueviolet?style=for-the-badge&logo=discord&logoColor=blueviolet) ![pyt](https://img.shields.io/badge/python-3.7-blueviolet?style=for-the-badge&logo=python&logoColor=blueviolet)
+![Discord](https://img.shields.io/discord/698579907185213503?color=blueviolet&logo=discord&logoColor=blueviolet&style=for-the-badge) ![discordpy](https://img.shields.io/badge/discord-py-blueviolet?style=for-the-badge&logo=discord&logoColor=blueviolet) ![discordbot](https://img.shields.io/badge/discord-bot-blueviolet?style=for-the-badge&logo=discord&logoColor=blueviolet) ![pyt](https://img.shields.io/badge/python-3.7-blueviolet?style=for-the-badge&logo=python&logoColor=blueviolet)
 
 
 </div>
