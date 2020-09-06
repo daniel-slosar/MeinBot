@@ -47,6 +47,14 @@ def community_report(guild):
     return online, idle, offline
 
 @client.command()
+async def rules(ctx):
+    await ctx.channel.purge(limit=1)
+    await ctx.send(file=discord.File('rules.gif'))
+    embed = discord.Embed(title="RULES!",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="READ THE RULES!\n\n**0000. Respect everyone.\n\n0001. Use channels properly.\n\n0010. Speak only English.\n\n0011. Do not spam.\n\n0100. Do not advertise.\n\n0101. Do not post anything NSFW or you'll get banned.\n\n0110. Do not swear or use abusive language.\n\n0111. Do not start conversation with controversial topics.\n\n1000. Do not mention @everyone.\n\n1001. Do not share any files for download.**\n\nAfter reading the rules confirm accepting them by reacting with :thumbsup:")
+    await ctx.send(embed=embed)
+
+
+@client.command()
 @commands.has_role("FÜHRER")
 async def kick(ctx, member: discord.Member, *, reason=None):
     await member.kick(reason=reason)
@@ -95,7 +103,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.command()
 async def help(ctx):
-	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://google.com", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
+	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://daydream404.github.io/MeinBot/", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
 	embed.set_thumbnail(url=client.user.avatar_url)
 	await ctx.send(embed=embed)
 
@@ -383,16 +391,22 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_member_join(member):
-    role = get(member.guild.roles, name="Peasant")
-    await member.add_roles(role)
-    channel = client.get_channel(id=747512532930920588)
-    embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
-    embed.set_thumbnail(url=f"{member.avatar_url}")
-    embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-    embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
-    embed.add_field(name=f"Your role: ", value=role)
-    embed.timestamp = datetime.datetime.utcnow()
-    await channel.send(embed=embed)
+    if meinbot_guild == client.get_guild(515156152066244635):
+        role = get(member.guild.roles, name="Peasant")
+        await member.add_roles(role)
+    else:
+        pass
+
+    for channel in member.text_channels:
+        if channel.permissions_for(member.me).send_messages:
+            #channel = client.get_channel(id=747512532930920588)
+            embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
+            embed.set_thumbnail(url=f"{member.avatar_url}")
+            embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
+            embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
+            embed.add_field(name=f"Your role: ", value=role)
+            embed.timestamp = datetime.datetime.utcnow()
+            await channel.send(embed=embed)
     
 
 @client.command()

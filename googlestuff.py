@@ -13,21 +13,29 @@ class GoogleStuff(commands.Cog):
     @commands.command()
     async def google(self, ctx,*, query):
         await ctx.send("I'm searching google...")
-        for i in search(query,lang='en',num=1,start=0,stop=1,pause=2):
+        '''for i in search(query,lang='en',num=1,start=0,stop=1,pause=2):
             i1 = i
         for i in search(query,lang='en',num=1,start=0,stop=2,pause=2):
             i2 = i
 
         for i in search(query,lang="en",num=1,start=0,stop=3,pause=2):
             i3=i
+        '''
+        output=""
+        output1 = ""
+        for i in search(query,num=5,stop=5,pause=2):
+            output = output + i
 
+        output1 = output.split("http")
         await ctx.channel.purge(limit=1)
         embed = discord.Embed(colour=0x520081)
         embed.set_thumbnail(url="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
         embed.set_author(name="Google Search")
-        embed.add_field(name="1. Result", value=i1,inline=False)
-        embed.add_field(name="2. Result", value=i2,inline=False)
-        embed.add_field(name="3. Result", value=i3,inline=False)
+        embed.add_field(name="1. Result", value=f"http{output1[1]}",inline=False)
+        embed.add_field(name="2. Result", value=f"http{output1[2]}",inline=False)
+        embed.add_field(name="3. Result", value=f"http{output1[3]}",inline=False)
+        embed.add_field(name="4. Result", value=f"http{output1[4]}",inline=False)
+        embed.add_field(name="5. Result", value=f"http{output1[5]}",inline=False)
         await ctx.send(embed=embed)
 
     @google.error
@@ -86,7 +94,12 @@ def setup(client):
 d = {}
 output = ""
 
-for i in search(query="LOL",num=10,stop=10,pause=2):
+for i in search(query,num=10,stop=10,pause=2):
     output = output + i
 
-print(output)'''
+print(output)
+
+l = output.split('http')
+print(l)
+print("http" + l[1])
+'''
