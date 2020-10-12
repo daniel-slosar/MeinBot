@@ -82,23 +82,29 @@ async def ban_error(ctx, error):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    member = client.get_user(519894723352199198)
+    #(519894723352199198)
     if before.channel is None and after.channel is not None:
-        if after.channel.id == 515158430751784960 and member == client.get_user(519894723352199198):
+        if after.channel.id == 515158430751784960 and member.id == 472502168738463755:
             user = client.get_user(373934947091742721)
             await user.send(f"{member} just joined the Room 1!")
             
-        elif after.channel.id == 713819586482405496 and member == client.get_user(519894723352199198):
+        elif after.channel.id == 713819586482405496 and member.id == 472502168738463755:
             user = client.get_user(373934947091742721)
             await user.send(f"{member} just joined the Room 2!")
 
-        elif after.channel.id == 699342733487243291 and member == client.get_user(519894723352199198):
+        elif after.channel.id == 699342733487243291 and member.id == 472502168738463755:
             user = client.get_user(373934947091742721)
             await user.send(f"{member} just joined the Room 3!")
+        
+        else:
+            pass
 
-    if after.channel is None and member == client.get_user(519894723352199198):
+    elif after.channel is None and member.id == 472502168738463755:
         user = client.get_user(373934947091742721)
-        await user.send(f"{member} just left the room!\n----------------------------")
+        await user.send(f"{member} just left the room!\n------------------------------------------------")
+    
+    else:
+        pass
 
 
 @client.command()
