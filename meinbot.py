@@ -17,6 +17,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord.voice_client import VoiceClient
 from discord import FFmpegPCMAudio
+from discord import Member as member
 from async_timeout import timeout
 from functools import partial
 from itertools import cycle
@@ -25,10 +26,17 @@ import lyricsgenius
 import math
 import platform
 
-client = commands.Bot(command_prefix = '.')
+intents = discord.Intents.default()
+intents.members = True
+intents.typing = False
+intents.presences = False
+
+client = commands.Bot(command_prefix = '.', intents=intents)
 client.remove_command('help')
 
-token = open("D:\\Python\\MeinBot\\token.txt", "r").read()
+global ROLE
+
+token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 
 
 def community_report(guild):
@@ -48,8 +56,6 @@ def community_report(guild):
 
 @client.command()
 async def rules(ctx):
-    await ctx.channel.purge(limit=1)
-    await ctx.send(file=discord.File('rules.gif'))
     embed = discord.Embed(title="RULES!",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="READ THE RULES!\n\n**0000. Respect everyone.\n\n0001. Use channels properly.\n\n0010. Speak only English.\n\n0011. Do not spam.\n\n0100. Do not advertise.\n\n0101. Do not post anything NSFW or you'll get banned.\n\n0110. Do not swear or use abusive language.\n\n0111. Do not start conversation with controversial topics.\n\n1000. Do not mention @everyone.\n\n1001. Do not share any files for download.**\n\nAfter reading the rules confirm accepting them by reacting with :thumbsup:")
     await ctx.send(embed=embed)
 
@@ -78,33 +84,6 @@ async def ban_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
         embed = discord.Embed(title="Ban Error", description=f"Missing Permission!",colour=0x520081)
         await ctx.send(embed=embed)
-
-
-@client.event
-async def on_voice_state_update(member, before, after):
-    #(519894723352199198)
-    if before.channel is None and after.channel is not None:
-        if after.channel.id == 515158430751784960 and member.id == 472502168738463755:
-            user = client.get_user(373934947091742721)
-            await user.send(f"{member} just joined the Room 1!")
-            
-        elif after.channel.id == 713819586482405496 and member.id == 472502168738463755:
-            user = client.get_user(373934947091742721)
-            await user.send(f"{member} just joined the Room 2!")
-
-        elif after.channel.id == 699342733487243291 and member.id == 472502168738463755:
-            user = client.get_user(373934947091742721)
-            await user.send(f"{member} just joined the Room 3!")
-        
-        else:
-            pass
-
-    elif after.channel is None and member.id == 472502168738463755:
-        user = client.get_user(373934947091742721)
-        await user.send(f"{member} just left the room!\n------------------------------------------------")
-    
-    else:
-        pass
 
 
 @client.command()
@@ -195,7 +174,7 @@ async def q_error(ctx, error):
 
 
 @client.command()
-async def clear(ctx, amount : int):
+async def clear(ctx, amount : int=1):
     await ctx.channel.purge(limit=amount + 1)
 
 @clear.error
@@ -341,6 +320,16 @@ async def countries(message):
     await message.channel.send("Here\'s the link for all countries: " + "https://github.com/Daydream404/meinbot/blob/master/countries.txt")
 
 
+@client.command()#needable
+async def role(ctx, role):
+    global server_id
+    server_id = ctx.message.guild.id
+    print(server_id)
+    global ROLE
+    ROLE = role
+    print(ROLE)
+    
+
 @client.command()
 async def userinfo(ctx, member: discord.Member = None):
     member = ctx.author if not member else member
@@ -379,6 +368,8 @@ async def on_ready():
 
 @client.event
 async def on_guild_join(guild):
+    server_id = guild.id
+    print(guild)
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             pltf = platform.platform()
@@ -392,28 +383,95 @@ async def on_guild_join(guild):
             embed.add_field(name="Running on: ", value=pltf)
             embed.add_field(name="Help command: ", value=f"`.command`")
             await channel.send(embed=embed)
+            await channel.send("Set your default role by typing `.role yourrolehere`")
             break
 
 
 @client.event
 async def on_member_join(member):
-    if meinbot_guild == client.get_guild(515156152066244635):
-        role = get(member.guild.roles, name="Peasant")
+    server_id = member.guild.id
+    if server_id == 515156152066244635:
+        print("GermanReich")
+        channel = client.get_channel(768940272561946645)
+        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
+
+        channel = client.get_channel(769528310552068106)
+        embed = discord.Embed(title="RULES!",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="READ THE RULES!\n\n**0000. Respect everyone.\n\n0001. Use channels properly.\n\n0010. Speak only English.\n\n0011. Do not spam.\n\n0100. Do not advertise.\n\n0101. Do not post anything NSFW or you'll get banned.\n\n0110. Do not swear or use abusive language.\n\n0111. Do not start conversation with controversial topics.\n\n1000. Do not mention @everyone.\n\n1001. Do not share any files for download.**\n\nAfter reading the rules confirm accepting them by reacting with :thumbsup:")
+        await channel.send(embed=embed)
+
+            
+        def check(reaction, user):
+            return user == member and str(reaction.emoji) in ['👍']
+        
+        reaction, user = await client.wait_for("reaction_add", check=check)
+        
+        role = get(member.guild.roles, name="Landwirt")
         await member.add_roles(role)
+
+        meinbot_guild = client.get_guild(515156152066244635)
+        #meinbot_guild je GermanReich
+        #server_id je 515156152066244635
+        for channel in meinbot_guild.text_channels:
+            if channel.permissions_for(meinbot_guild.me).send_messages:
+                embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
+                embed.set_thumbnail(url=f"{member.avatar_url}")
+                embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
+                embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
+                embed.add_field(name=f"Your role: ", value=role)
+                embed.timestamp = datetime.datetime.utcnow()
+                await channel.send(embed=embed)
+                break
+    elif server_id == 751897980432547941:
+        print("MeinbotServer")
+        channel = client.get_channel(768941337927352342)
+        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
+        role = get(member.guild.roles, name="noob")
+        await member.add_roles(role)
+
+        meinbot_guild = client.get_guild(751897980432547941)
+        for channel in meinbot_guild.text_channels:
+            if channel.permissions_for(meinbot_guild.me).send_messages:
+                embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
+                embed.set_thumbnail(url=f"{member.avatar_url}")
+                embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
+                embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
+                embed.add_field(name=f"Your role: ", value=role)
+                embed.timestamp = datetime.datetime.utcnow()
+                await channel.send(embed=embed)
+                break
+
+    else:
+        try:
+            role = get(member.guild.roles, name=ROLE)
+            await member.add_roles(role)
+        except Exception as e:
+            #await channel.send(e)
+            await channel.send("Well you fucked up something didn\'t you? Try Help on my [website](https://www.meinbot.com)")   
+
+
+@client.command()
+async def poke(ctx,user,n: int=1):
+    await ctx.channel.purge(limit=1)
+    for n in range(n):
+        await ctx.send(f"{user}")
+
+
+@client.event
+async def on_member_remove(member):
+    print("LOL")
+    server_id = member.guild.id
+    if server_id == 515156152066244635:
+        channel = client.get_channel(768940272561946645)
+        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
+    
+    elif server_id == 751897980432547941:
+        channel = client.get_channel(768941337927352342)
+        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
+
     else:
         pass
 
-    for channel in member.text_channels:
-        if channel.permissions_for(member.me).send_messages:
-            #channel = client.get_channel(id=747512532930920588)
-            embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
-            embed.set_thumbnail(url=f"{member.avatar_url}")
-            embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-            embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
-            embed.add_field(name=f"Your role: ", value=role)
-            embed.timestamp = datetime.datetime.utcnow()
-            await channel.send(embed=embed)
-    
+
 
 @client.command()
 async def command(ctx):
@@ -447,7 +505,13 @@ async def on_message(message):  # event that happens per any message.
             await message.channel.purge(limit=1)
             await message.channel.send("Robo ma maly pipik\tRobo ma maly pipik\tRobo ma maly pipik\tRobo ma maly pipik\tRobo ma maly pipik\tRobo ma maly pipik\n" * 10)
 
-
+        
+    '''if "europix" in message.content.lower():
+        if message.channel.id == 712375665877319721:
+            random_emojis = ('5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟')
+            time.sleep(2)
+            emoji = random.choice(random_emojis)
+            await message.add_reaction(emoji)'''
 
     if "pornhub" in message.content.lower():
         await message.channel.send("Rate this porn you watched! I\'ll give it..")
@@ -467,28 +531,14 @@ async def on_message(message):  # event that happens per any message.
             await message.channel.purge(limit=1)
 
 
-    if "<@!724654875157201066>" in message.content.lower():
+    '''if "<@!724654875157201066>" in message.content.lower():
         emoji = '<:jarko:719935424696418446>'
-        await message.add_reaction(emoji)
-
-
-    if "<@!386529526479454223>" in message.content.lower():
-        emoji = '<:pepesad:604586503250640896>'
-        await  message.add_reaction(emoji)
-
-    if "<@!472502168738463755>" in message.content.lower():
-        emoji = '<:pepeamen:630159152689315850>'
-        await  message.add_reaction(emoji)
-
-    if "<@!373934947091742721>" in message.content.lower():
-        emoji = '<:pepedrug:630161061420597289>'
-        await  message.add_reaction(emoji)
-
+        await message.add_reaction(emoji)'''
 
 
 @client.command()
 async def exit(ctx):
-    await ctx.send("Shutting down...")
+    #await ctx.send("Shutting down...")
     await client.close()
 
 
@@ -498,4 +548,6 @@ for ext in extensions:
     client.load_extension(ext)
 
 client.run(token)
+
+
 
