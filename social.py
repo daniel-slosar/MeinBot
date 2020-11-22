@@ -84,7 +84,7 @@ class Social(commands.Cog):
         cur_page = 1
         chunk = song.lyrics[:per_page]
         embed = discord.Embed(colour=0x520081)
-        embed.add_field(name=f"{music} by {artist}", value=chunk, inline=False)
+        embed.add_field(name=f"{music}-{artist}", value=chunk, inline=False)
         embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
         message = await ctx.send(embed=embed)
         #message = await ctx.send(f"Page {cur_page}/{pages}:\n{chunk}")
