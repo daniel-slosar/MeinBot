@@ -67,7 +67,17 @@ $ pip install -r requirements.txt
 
 Commands | Usage
 ------------ | -------------
+.help | Displays help command for bot
+.q | Ask your troubling question
+.clear | Delete certain number of messages
+.rn | Generates random number
+.yn | Random yes/no option
+.command | Shows basic commands
+BASIC
+.wiki | Finds any wikipedia page
 .lyrics | Shows lyrics of wanted song
-.members | Shows number of members
+.ig | Uploads profile picture from instagram
+
+
 
 </div>
