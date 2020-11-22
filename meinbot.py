@@ -24,7 +24,7 @@ from itertools import cycle
 from asyncio import sleep
 #import lyricsgenius
 import math
-import platform
+
 
 intents = discord.Intents.default()
 intents.members = True
@@ -39,20 +39,6 @@ global ROLE
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 #token = open("/home/ec2-user/token.txt").read() linux
 
-def community_report(guild):
-    online = 0
-    idle = 0
-    offline = 0
-
-    for m in guild.members:
-        if str(m.status) == "online":
-            online += 1
-        elif str(m.status) == "offline":
-            offline += 1
-        else:
-            idle += 1
-
-    return online, idle, offline
 
 @client.command()
 async def rules(ctx):
@@ -61,49 +47,10 @@ async def rules(ctx):
 
 
 @client.command()
-@commands.has_role("FÜHRER")
-async def kick(ctx, member: discord.Member, *, reason=None):
-    await member.kick(reason=reason)
-    await ctx.send(f"{member} has been kicked")
-
-@kick.error
-async def kick_error(ctx, error):
-    if isinstance(error, commands.CommandInvokeError):
-        embed = discord.Embed(title="Kick Error", description=f"Missing Permission!",colour=0x520081)
-        await ctx.send(embed=embed)
-
-
-@client.command()
-@commands.has_role("FÜHRER")
-async def ban(ctx, member: discord.Member, *, reason=None):
-    await member.ban(reason=reason)
-    await ctx.send(f"{member} has been kicked")
-
-@kick.error
-async def ban_error(ctx, error):
-    if isinstance(error, commands.CommandInvokeError):
-        embed = discord.Embed(title="Ban Error", description=f"Missing Permission!",colour=0x520081)
-        await ctx.send(embed=embed)
-
-
-@client.command()
 async def help(ctx):
 	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://daydream404.github.io/MeinBot/", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
 	embed.set_thumbnail(url=client.user.avatar_url)
 	await ctx.send(embed=embed)
-
-
-@client.command()	
-async def info(ctx):
-    pltf = platform.platform()
-    embed = discord.Embed(colour=0x520081, title="INFO",timestamp=ctx.message.created_at)
-    embed.set_thumbnail(url=client.user.avatar_url)
-    embed.add_field(name="Name: ", value="MeinBot#1050")
-    embed.add_field(name="Creation date: ", value="01 May 2019")
-    embed.add_field(name="Created by: ", value="01001100#2651")
-    embed.add_field(name="Running on: ", value=pltf)
-    embed.add_field(name="Help command:", value=f"`.help`")
-    await ctx.send(embed=embed)
 
 
 @client.command()
@@ -141,22 +88,6 @@ async def clear_error(ctx, error):
 
 
 @client.command()
-async def qr(ctx, *, data):
-    qr = qrcode.QRCode(version=1,box_size=10,border=5)
-    qr.add_data(data)
-    qr.make(fit=True)
-    img = qr.make_image(fill="black",back_color="white")
-    img.save("1.png")
-    await ctx.channel.send(file=discord.File('1.png'))
-
-@qr.error
-async def qr_error(ctx, error):
-    if isinstance(error, commands.errors.MissingRequiredArgument):
-        embed = discord.Embed(title="Error", description=f"You need to specify text to be converted to QR CODE `.qr youtube.com`",colour=0x520081)
-        await ctx.send(embed=embed)
-
-
-@client.command()
 async def rn(ctx,s: int = 1 , e: int = 99):
     r = random.randint(s,e)
     await ctx.send(f"```css\nRandom Number: {r}```")
@@ -167,15 +98,6 @@ async def yn(ctx, n: int=1):
     choices = ['Yes', 'No']
     for i in range(n):
         await ctx.send(f"```css\n{random.choice(choices)}```")
-
-
-@client.command()
-async def members(message):
-    global meinbot_guild
-    meinbot_guild = client.get_guild(515156152066244635)
-    online, idle, offline = community_report(meinbot_guild)
-    embed = discord.Embed(colour=0x520081,title="Members",description=f":green_circle: Online: {online} \n\n :red_circle: Busy/Idle: {idle} \n\n :white_circle:  Offline: {offline} \n\n :8ball: Server Count: {meinbot_guild.member_count} ")
-    await message.channel.send(embed=embed)
 
 
 @client.command()
@@ -194,29 +116,6 @@ async def role(ctx, role):
     print(ROLE)
     
 
-@client.command()
-async def userinfo(ctx, member: discord.Member = None):
-    member = ctx.author if not member else member
-    roles = [role for role in member.roles] #roles= [] for roles in member.roles: roles.append(role) same shit
-    
-    embed = discord.Embed(colour=0x520081, timestamp=ctx.message.created_at)
-    
-    embed.set_author(name=f"User Info - {member}")
-    embed.set_thumbnail(url=member.avatar_url)
-    embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
-    
-    embed.add_field(name="ID:", value=member.id)
-    embed.add_field(name="Name:", value=member.display_name)
-    
-    embed.add_field(name="Created at:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
-    embed.add_field(name="Joined at server:", value=member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
-
-    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
-    embed.add_field(name="Bot", value=member.bot)
-
-    await ctx.send(embed=embed)
-
-
 @client.event
 async def on_command_error(ctx,error):
     if isinstance(error, commands.CommandNotFound):
@@ -229,27 +128,6 @@ async def on_ready():
     global meinbot_guild
     print(f"You've logged in as: {client.user}")
     await client.change_presence(activity=discord.Game("with your sister"))
-
-
-@client.event
-async def on_guild_join(guild):
-    server_id = guild.id
-    print(guild)
-    for channel in guild.text_channels:
-        if channel.permissions_for(guild.me).send_messages:
-            pltf = platform.platform()
-            member = client.get_user(573091512066375690)
-            await channel.send("Hi, my name is MeinBot. I\'m your new bot!")
-            embed = discord.Embed(colour=0x520081, title="INFO")
-            embed.set_thumbnail(url=member.avatar_url)
-            embed.add_field(name="Name: ", value="MeinBot#1050")
-            embed.add_field(name="Creation date: ", value="01 May 2019")
-            embed.add_field(name="Created by: ", value="01001100#2651")
-            embed.add_field(name="Running on: ", value=pltf)
-            embed.add_field(name="Help command: ", value=f"`.command`")
-            await channel.send(embed=embed)
-            await channel.send("Set your default role by typing `.role yourrolehere`")
-            break
 
 
 @client.event
@@ -319,7 +197,6 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    print("LOL")
     server_id = member.guild.id
     if server_id == 515156152066244635:
         channel = client.get_channel(768940272561946645)
