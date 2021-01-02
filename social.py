@@ -25,6 +25,7 @@ class Social(commands.Cog):
             embed.set_thumbnail(url="https://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png")
             embed.add_field(name="Wikipedia", value = chunk)
             embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+            embed.set_footer(text=f"Powered by https://pypi.org/project/wikipedia/")
             message = await ctx.send(embed=embed)
             await message.add_reaction("◀️")
             await message.add_reaction("▶️")
@@ -77,15 +78,20 @@ class Social(commands.Cog):
 
     @commands.command()
     async def lyrics(self, ctx, artist, *, music):
-        genius = lyricsgenius.Genius(token_genius)
-        song = genius.search_song(music, artist)
+        try:
+            genius = lyricsgenius.Genius(token_genius)
+            song = genius.search_song(music, artist)
+        except:
+            await ctx.send("FUUUUUCK")
+
         per_page = 1000
         pages = math.ceil(len(song.lyrics) / per_page)
         cur_page = 1
         chunk = song.lyrics[:per_page]
         embed = discord.Embed(colour=0x520081)
-        embed.add_field(name=f"{music}-{artist}", value=chunk, inline=False)
+        embed.add_field(name=f"{music.capitalize()} - {artist.capitalize()}", value=chunk, inline=False)
         embed.add_field(name="Page", value=f"{cur_page}/{pages}", inline=False)
+        embed.set_footer(text = f"Powered by: https://pypi.org/project/lyricsgenius/")
         message = await ctx.send(embed=embed)
         #message = await ctx.send(f"Page {cur_page}/{pages}:\n{chunk}")
         await message.add_reaction("◀️")
@@ -126,7 +132,7 @@ class Social(commands.Cog):
     @lyrics.error
     async def lyrics_error(self,ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
-            embed = discord.Embed(title="Error", description=f"You need to specify song and artist `.lyrics \"Dua Lipa\"`",colour=0x520081)
+            embed = discord.Embed(title="Error", description=f"You need to specify song and artist `.lyrics Baby Justin Bieber` or `.lyrics \"Dua Lipa\" Levitating`",colour=0x520081)
             await ctx.send(embed=embed)
 
 
@@ -144,6 +150,13 @@ class Social(commands.Cog):
         if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = discord.Embed(title="Error", description=f"You need to specify instagram profile `.ig selenagomez`",colour=0x520081)
             await ctx.send(embed=embed)
+
+    @commands.command()
+    async def avatar(self, ctx, member: discord.Member = None):
+        member = ctx.author if not member else member
+        embed=discord.Embed(colour=0x520081,title="AVATAR")
+        embed.set_image(url=member.avatar_url)
+        await ctx.send(embed=embed)
 
 def setup(client):
     client.add_cog(Social(client))

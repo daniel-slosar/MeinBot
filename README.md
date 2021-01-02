@@ -67,17 +67,28 @@ $ pip install -r requirements.txt
 
 Commands | Usage
 ------------ | -------------
-**BASIC** **COMMANDS**  
+**BASIC**| 
 .help | Displays help command for bot
-.q | Ask your troubling question
 .clear | Delete certain number of messages
+.command | Shows basic commands
+.ping | Pings the bot with response
+.repeat | Bot will repeat what you write
+.q | Ask your troubling question
 .rn | Generates random number
 .yn | Random yes/no option
-.command | Shows basic commands
+.poke | Mention user x times
+.userinfo | Prints info about given user
 **SOCIAL** |
-.wiki | Finds any wikipedia page
-.lyrics | Shows lyrics of wanted song
+.wiki | Finds any wikipedia page(buggy)
+.lyrics | Prints lyrics of given song
 .ig | Uploads profile picture from instagram
+.avatar | Uploads profile picture from discord
+**MODULES** |
+.days | Prints date 
+.corona | Prints covid cases from the specific country
+.movie | Generates movie from Top 250 IMDb movies
+.info | Shows info about bot
+
 
 
 

@@ -31,13 +31,6 @@ class Basic(commands.Cog):
             embed = discord.Embed(title="Error", description=f"What should I repeat? `.repeat Hello!`",colour=0x520081)
             await ctx.send(embed=embed)
 
-
-    @commands.command()
-    async def avatar(self, ctx, member: discord.Member = None):
-        member = ctx.author if not member else member
-        embed=discord.Embed(colour=0x520081,title="AVATAR")
-        embed.set_image(url=member.avatar_url)
-        await ctx.send(embed=embed)
         
     @commands.command()
     async def poke(self, ctx,user,n: int=1):

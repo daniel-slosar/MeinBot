@@ -60,6 +60,7 @@ class Members(commands.Cog):
                 embed.add_field(name="Created by: ", value="01001100#2651")
                 embed.add_field(name="Running on: ", value=pltf)
                 embed.add_field(name="Help command: ", value=f"`.command`")
+                embed.add_field(name="Programming language: ", value=f"Python 3.7")
                 await channel.send(embed=embed)
                 await channel.send("Set your default role by typing `.role yourrolehere`")
                 break

@@ -26,10 +26,7 @@ from asyncio import sleep
 import math
 
 
-intents = discord.Intents.default()
-intents.members = True
-intents.typing = False
-intents.presences = False
+intents = discord.Intents.all()
 
 client = commands.Bot(command_prefix = '.', intents=intents)
 client.remove_command('help')
@@ -196,6 +193,15 @@ async def on_member_join(member):
 
 
 @client.event
+async def on_member_update(before, after):
+    member = client.get_user(472502168738463755)
+    if before.raw_status == "offline":
+        if after.raw_status == "online" and member == client.get_user(472502168738463755):
+            user = client.get_user(373934947091742721)
+            await user.send(f"{member} is Online!")
+    
+
+@client.event
 async def on_member_remove(member):
     server_id = member.guild.id
     if server_id == 515156152066244635:
@@ -259,11 +265,11 @@ async def on_message(message):  # event that happens per any message.
     global meinbot_guild
     print(f"#{message.channel}: user {message.author}: {message.content}")
 
-    if "pornhub" in message.content.lower():
+    '''if "pornhub" in message.content.lower():
         random_emojis = ('0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟','💯','👌🏾')
         time.sleep(2)
         emoji = random.choice(random_emojis)
-        await message.add_reaction(emoji)
+        await message.add_reaction(emoji)'''
 
 
 
