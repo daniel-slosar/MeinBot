@@ -6,7 +6,7 @@ from covid import Covid
 import random
 import imdb
 from discord.ext import commands
-from pornhub_api import PornhubApi
+
 
 class Modules(commands.Cog):
 
@@ -87,25 +87,6 @@ class Modules(commands.Cog):
         embed.set_footer(text="https://www.imdb.com/") 
         await message.channel.send(embed=embed)
 
-
-    @commands.command()
-    async def pornhub(self, ctx):
-        api = PornhubApi()
-        tags = random.sample(api.video.tags("f").tags, 5)
-        category = random.choice(api.video.categories().categories)
-        data = api.search.search(ordering="mostviewed",period="daily",tags=tags,category=category)
-        p=[]
-        h=[]
-        for vids in data.videos:
-            h.append(vids.title)
-            p.append(vids.url)
-        
-        
-        #\n{p[1]}\n{p[2]}\n{p[3]}\n{p[4]}\n{p[5]}\n{p[6]}\n{p[7]}\n{p[8]}\n{p[9]}
-        embed = discord.Embed(title="Pornhub Videos",description=f"{h[0]}\n{p[0]}")
-        embed.set_thumbnail(url=p[0])
-        await ctx.send(embed=embed)
-        #await ctx.send(p[0])
 
 def setup(client):
     client.add_cog(Modules(client))
