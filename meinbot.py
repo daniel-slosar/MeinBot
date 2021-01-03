@@ -196,8 +196,9 @@ async def on_member_join(member):
 async def on_member_update(before, after):
     if before.raw_status == "offline" and after.raw_status == "online" and int(before.id) == 472502168738463755:
             user = client.get_user(373934947091742721)
+            member = client.get_user(472502168738463755)
             await user.send(f"{member} is Online!")
-    
+
 
 @client.event
 async def on_member_remove(member):
