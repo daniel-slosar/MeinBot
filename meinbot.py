@@ -274,7 +274,7 @@ async def on_message(message):  # event that happens per any message.
 
 @client.command()
 async def exit(ctx):
-    #await ctx.send("Shutting down...")
+    await ctx.channel.purge(limit=1)    
     await client.close()
 
 
