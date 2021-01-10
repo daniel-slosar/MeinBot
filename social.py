@@ -82,7 +82,7 @@ class Social(commands.Cog):
             genius = lyricsgenius.Genius(token_genius)
             song = genius.search_song(music, artist)
         except:
-            await ctx.send("FUUUUUCK")
+            await ctx.send("BAD TOKEN!")
 
         per_page = 1000
         pages = math.ceil(len(song.lyrics) / per_page)

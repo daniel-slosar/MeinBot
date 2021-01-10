@@ -31,7 +31,6 @@ intents = discord.Intents.all()
 client = commands.Bot(command_prefix = '.', intents=intents)
 client.remove_command('help')
 
-global ROLE
 
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 #token = open("/home/ec2-user/token.txt").read() linux
@@ -85,7 +84,7 @@ async def clear_error(ctx, error):
 
 
 @client.command()
-async def rn(ctx,s: int = 1 , e: int = 99):
+async def rand(ctx,s: int = 1 , e: int = 99):
     r = random.randint(s,e)
     await ctx.send(f"```css\nRandom Number: {r}```")
 
@@ -101,16 +100,6 @@ async def yn(ctx, n: int=1):
 async def countries(message):
     global meinbot_guild
     await message.channel.send("Here\'s the link for all countries: " + "https://github.com/Daydream404/meinbot/blob/master/countries.txt")
-
-
-@client.command()#needable
-async def role(ctx, role):
-    global server_id
-    server_id = ctx.message.guild.id
-    print(server_id)
-    global ROLE
-    ROLE = role
-    print(ROLE)
     
 
 @client.event
@@ -125,119 +114,6 @@ async def on_ready():
     global meinbot_guild
     print(f"You've logged in as: {client.user}")
     await client.change_presence(activity=discord.Game("with your sister"))
-
-
-@client.event
-async def on_member_join(member):
-    server_id = member.guild.id
-    if server_id == 515156152066244635:
-        print("GermanReich")
-        channel = client.get_channel(768940272561946645)
-        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
-
-        #channel = client.get_channel(769528310552068106)
-        print(member)
-        embed = discord.Embed(title="RULES!",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="READ THE RULES!\n\n**0000. Respect everyone.\n\n0001. Use channels properly.\n\n0010. Speak only English.\n\n0011. Do not spam.\n\n0100. Do not advertise.\n\n0101. Do not post anything NSFW or you'll get banned.\n\n0110. Do not swear or use abusive language.\n\n0111. Do not start conversation with controversial topics.\n\n1000. Do not mention @everyone.\n\n1001. Do not share any files for download.**\n\nAfter reading the rules confirm accepting them by reacting with :thumbsup:")
-        #await channel.send(embed=embed)
-        await member.send(embed=embed)
-
-            
-        def check(reaction, user):
-            return user == member and str(reaction.emoji) in ['👍']
-        
-        reaction, user = await client.wait_for("reaction_add", check=check)
-        
-        role = get(member.guild.roles, name="Landwirt")
-        await member.add_roles(role)
-
-        meinbot_guild = client.get_guild(515156152066244635)
-        #meinbot_guild je GermanReich
-        #server_id je 515156152066244635
-        for channel in meinbot_guild.text_channels:
-            if channel.permissions_for(meinbot_guild.me).send_messages:
-                embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
-                embed.set_thumbnail(url=f"{member.avatar_url}")
-                embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-                embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
-                embed.add_field(name=f"Your role: ", value=role)
-                embed.timestamp = datetime.datetime.utcnow()
-                await channel.send(embed=embed)
-                break
-
-    elif server_id == 751897980432547941:
-        print("MeinbotServer")
-        channel = client.get_channel(768941337927352342)
-        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
-        role = get(member.guild.roles, name="noob")
-        await member.add_roles(role)
-
-        meinbot_guild = client.get_guild(751897980432547941)
-        for channel in meinbot_guild.text_channels:
-            if channel.permissions_for(meinbot_guild.me).send_messages:
-                embed = discord.Embed(colour=0x520081, description=f"Welcome to the party!")
-                embed.set_thumbnail(url=f"{member.avatar_url}")
-                embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-                embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
-                embed.add_field(name=f"Your role: ", value=role)
-                embed.timestamp = datetime.datetime.utcnow()
-                await channel.send(embed=embed)
-                break
-
-    else:
-        try:
-            role = get(member.guild.roles, name=ROLE)
-            await member.add_roles(role)
-        except Exception as e:
-            #await channel.send(e)
-            await channel.send("Well you fucked up something didn\'t you? Try Help on my [website](https://www.meinbot.com)")   
-
-
-@client.event
-async def on_member_update(before, after):
-    if before.raw_status == "offline" and after.raw_status == "online" and int(before.id) == 472502168738463755:
-            user = client.get_user(373934947091742721)
-            member = client.get_user(472502168738463755)
-            await user.send(f"{member} is Online!")
-
-
-@client.event
-async def on_member_remove(member):
-    server_id = member.guild.id
-    if server_id == 515156152066244635:
-        channel = client.get_channel(768940272561946645)
-        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
-
-        meinbot_guild = client.get_guild(server_id)
-        for channel in meinbot_guild.text_channels:
-            if channel.permissions_for(meinbot_guild.me).send_messages:
-                embed = discord.Embed(colour=0x520081, description=f"Left the party!")
-                embed.set_thumbnail(url=f"{member.avatar_url}")
-                embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-                embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
-                embed.add_field(name=f"We won\'t miss you..", value="Don\'t worry!")
-                embed.timestamp = datetime.datetime.utcnow()
-                await channel.send(embed=embed)
-                break
-    
-    elif server_id == 751897980432547941:
-        channel = client.get_channel(768941337927352342)
-        await channel.edit(name = '📊Member count: {}'.format(channel.guild.member_count))
-        
-        meinbot_guild = client.get_guild(server_id)
-        for channel in meinbot_guild.text_channels:
-            if channel.permissions_for(meinbot_guild.me).send_messages:
-                embed = discord.Embed(colour=0x520081, description=f"Left the party!")
-                embed.set_thumbnail(url=f"{member.avatar_url}")
-                embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-                embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")
-                embed.add_field(name=f"We won\'t miss you..", value="Don\'t worry!")
-                embed.timestamp = datetime.datetime.utcnow()
-                await channel.send(embed=embed)
-                break
-
-    else:
-        pass
-
 
 
 @client.command()
@@ -256,7 +132,6 @@ async def command(ctx):
     await ctx.send(embed=embed)
 
 
-
 @client.event 
 async def on_message(message):  # event that happens per any message.
     bad_words = ["oliver ma maly pipik", "daniel ma maly pipik"]
@@ -271,7 +146,6 @@ async def on_message(message):  # event that happens per any message.
         await message.add_reaction(emoji)'''
 
 
-
 @client.command()
 async def exit(ctx):
     await ctx.channel.purge(limit=1)    
@@ -279,7 +153,7 @@ async def exit(ctx):
 
 
 #loading cogs
-extensions = ['googlestuff','social','basic','modules']
+extensions = ['googlestuff','social','basic','modules','members']
 for ext in extensions:
     client.load_extension(ext)
 

@@ -2,6 +2,7 @@ import os
 import discord
 import time
 from discord.ext import commands
+import random
 
 class Basic(commands.Cog):
 
