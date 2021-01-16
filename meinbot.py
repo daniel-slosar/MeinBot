@@ -44,7 +44,7 @@ async def rules(ctx):
 
 @client.command()
 async def help(ctx):
-	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://daydream404.github.io/MeinBot/", description=":tools:  Commands list [here](https://google.com)\n\n :interrobang:  Any questions? [FAQ](https://google.com)\n\n:desktop:  Join our Discord! [Discord server](https://google.com)")
+	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://daydream404.github.io/MeinBot/", description=":tools:  Commands list [here](https://daydream404.github.io/MeinBot/)\n\n :interrobang:  Any questions? [FAQ](https://daydream404.github.io/MeinBot/)\n\n:desktop:  Join our Discord! [Discord server](https://discord.gg/PjYewPngVe)")
 	embed.set_thumbnail(url=client.user.avatar_url)
 	await ctx.send(embed=embed)
 
@@ -68,7 +68,7 @@ async def q(ctx, *, question):
 @q.error
 async def q_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        embed = discord.Embed(title="Error", description=f"You need to specify question `.q Am I gay?`",colour=0x520081)
+        embed = discord.Embed(title="Error", description=f"You need to specify question `.q Should I go outside?`",colour=0x520081)
         await ctx.send(embed=embed)
 
 
@@ -84,19 +84,6 @@ async def clear_error(ctx, error):
 
 
 @client.command()
-async def rand(ctx,s: int = 1 , e: int = 99):
-    r = random.randint(s,e)
-    await ctx.send(f"```css\nRandom Number: {r}```")
-
-
-@client.command()
-async def yn(ctx, n: int=1):
-    choices = ['Yes', 'No']
-    for i in range(n):
-        await ctx.send(f"```css\n{random.choice(choices)}```")
-
-
-@client.command()
 async def countries(message):
     global meinbot_guild
     await message.channel.send("Here\'s the link for all countries: " + "https://github.com/Daydream404/meinbot/blob/master/countries.txt")
@@ -105,8 +92,13 @@ async def countries(message):
 @client.event
 async def on_command_error(ctx,error):
     if isinstance(error, commands.CommandNotFound):
-        embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.help`",colour=0x520081)
-        await ctx.send(embed=embed)
+        x = str(error)
+        x = x.split()[1]
+        if x == '"BMI"':
+            pass
+        else:
+            embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.help`",colour=0x520081)
+            await ctx.send(embed=embed)
 
 
 @client.event #event decorator/wrapper
@@ -139,12 +131,49 @@ async def on_message(message):  # event that happens per any message.
     global meinbot_guild
     print(f"#{message.channel}: user {message.author}: {message.content}")
 
-    '''if "pornhub" in message.content.lower():
-        random_emojis = ('0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟','💯','👌🏾')
-        time.sleep(2)
-        emoji = random.choice(random_emojis)
-        await message.add_reaction(emoji)'''
+    if message.content.startswith('.BMI'): #.BMI
+        channel = message.channel
+        await channel.send("What\'s your height?")
+        def height_func(m):
+            return " cm" in m.content and m.channel == channel
 
+        msg = await client.wait_for('message', check=height_func)
+        msg = msg.content
+        height= float(msg[0] + msg[1] + msg[2])
+        height = height /100
+        print(height)
+
+        await channel.send("What\'s your weight?")
+        def weight_func(m):
+            return " kg" in m.content and m.channel == channel
+
+        msg = await client.wait_for('message', check=weight_func)
+        msg = msg.content
+        weight= float(msg[0] + msg[1] + msg[2])
+        print(weight)
+        bmi = weight/pow(height,2)
+        if bmi >= 25.0 and bmi <= 29.9:
+            embed = discord.Embed(title="Body Mass Index", description=f"**You are Overweight!**",colour=0xffea00)
+            embed.set_thumbnail(url="https://www-assets.withings.com/pages/health-insights/about-body-mass-index/media/bmi-chart.png")
+            await channel.send(embed=embed)
+        elif bmi >= 18.5 and bmi <= 24.9:
+            embed = discord.Embed(title="Body Mass Index", description=f"**You have a Normal Weight!**",colour=0x00ff04)
+            embed.set_thumbnail(url="https://www-assets.withings.com/pages/health-insights/about-body-mass-index/media/bmi-chart.png")
+            await channel.send(embed=embed)
+        elif bmi < 18.5:
+            embed = discord.Embed(title="Body Mass Index", description=f"**You are Underweight!**",colour=0x00bbff)
+            embed.set_thumbnail(url="https://www-assets.withings.com/pages/health-insights/about-body-mass-index/media/bmi-chart.png")
+            await channel.send(embed=embed)
+        elif bmi >= 30.0 and bmi <=34.9:
+            embed = discord.Embed(title="Body Mass Index", description=f"**You are Obese!**",colour=0xff8800)
+            embed.set_thumbnail(url="https://www-assets.withings.com/pages/health-insights/about-body-mass-index/media/bmi-chart.png")
+            await channel.send(embed=embed)
+        elif bmi>=35:
+            embed = discord.Embed(title="Body Mass Index", description=f"**You are Extremely Obese!**",colour=0xff0000)
+            embed.set_thumbnail(url="https://www-assets.withings.com/pages/health-insights/about-body-mass-index/media/bmi-chart.png")
+            await channel.send(embed=embed)
+        else:
+            await channel.send("Something is not right")
 
 @client.command()
 async def exit(ctx):

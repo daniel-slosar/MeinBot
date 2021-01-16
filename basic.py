@@ -9,14 +9,6 @@ class Basic(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-
-    @commands.command()
-    async def ping(self, ctx):
-        embed = discord.Embed(colour=0x520081, title="Ping")
-        embed.add_field(name="Latency:", value=self.client.latency)
-        await ctx.send(embed=embed)
-
-
     @commands.command()
     async def repeat(self,ctx, *, msng):
         if msng == "I\'m stupid":
@@ -32,13 +24,23 @@ class Basic(commands.Cog):
             embed = discord.Embed(title="Error", description=f"What should I repeat? `.repeat Hello!`",colour=0x520081)
             await ctx.send(embed=embed)
 
-        
     @commands.command()
     async def poke(self, ctx,user,n: int=1):
         await ctx.channel.purge(limit=1)
         for n in range(n):
             time.sleep(0.8)
-            await ctx.send(f"{user}")
+            await ctx.send(f"{user} poked by <@!{ctx.author.id}>")
+
+    @commands.command()
+    async def rand(self,ctx,s: int = 1 , e: int = 99):
+        r = random.randint(s,e)
+        await ctx.send(f"```css\nRandom Number: {r}```")
+
+    @commands.command()
+    async def yn(self, ctx, n: int=1):
+        choices = ['Yes', 'No']
+        for i in range(n):
+            await ctx.send(f"```css\n{random.choice(choices)}```")
 
 def setup(client):
     client.add_cog(Basic(client))

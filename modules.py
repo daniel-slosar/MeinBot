@@ -17,7 +17,7 @@ class Modules(commands.Cog):
     async def rl(self,ctx):
         names = ["011001100", "Pipikator25", "Themm"]
         random_list = random.choice(names)
-        embed=discord.Embed(colour=0x520081,title="Rocket League Tournament", description=f"Random: __**{random_list}**__")
+        embed=discord.Embed(colour=0x520081,title="Rocket League Tournament", description=f"Vypadol: __**{random_list}**__")
         embed.set_thumbnail(url="https://rocketleague.media.zestyio.com/rl_s2_core_1920x1080_no-logos.jpg")
         await ctx.send(embed=embed)
 
@@ -93,7 +93,7 @@ class Modules(commands.Cog):
         embed.add_field(name="Powered by: ", value="https://pypi.org/project/IMDbPY/")
         embed.set_footer(text="https://www.imdb.com/") 
         await message.channel.send(embed=embed)
-
+        
 
 def setup(client):
     client.add_cog(Modules(client))

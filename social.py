@@ -75,7 +75,6 @@ class Social(commands.Cog):
             embed = discord.Embed(title="Error", description=f"You need to specify wiki search `.wiki \"Donald Trump\"`", colour=0x520081)
             await ctx.send(embed=embed)
 
-
     @commands.command()
     async def lyrics(self, ctx, artist, *, music):
         try:
@@ -137,7 +136,7 @@ class Social(commands.Cog):
 
 
     @commands.command()
-    async def ig(self, ctx, profile):
+    async def insta(self, ctx, profile):
         profile1 = profile
         instg = instaloader.Instaloader()
         profile = instaloader.Profile.from_username(instg.context, profile)
@@ -145,8 +144,8 @@ class Social(commands.Cog):
         await ctx.channel.send(f"<https://www.instagram.com/{profile1}/>")
         await ctx.channel.send(file=discord.File('instagram.jpg'))
 
-    @ig.error
-    async def ig_error(self, ctx, error):
+    @insta.error
+    async def insta_error(self, ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = discord.Embed(title="Error", description=f"You need to specify instagram profile `.ig selenagomez`",colour=0x520081)
             await ctx.send(embed=embed)

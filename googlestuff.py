@@ -89,17 +89,3 @@ def setup(client):
     client.add_cog(GoogleStuff(client))
 
     
-'''
-
-d = {}
-output = ""
-
-for i in search(query,num=10,stop=10,pause=2):
-    output = output + i
-
-print(output)
-
-l = output.split('http')
-print(l)
-print("http" + l[1])
-'''
