@@ -13,13 +13,7 @@ class Modules(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
-    async def rl(self,ctx):
-        names = ["011001100", "Pipikator25", "Themm"]
-        random_list = random.choice(names)
-        embed=discord.Embed(colour=0x520081,title="Rocket League Tournament", description=f"Vypadol: __**{random_list}**__")
-        embed.set_thumbnail(url="https://rocketleague.media.zestyio.com/rl_s2_core_1920x1080_no-logos.jpg")
-        await ctx.send(embed=embed)
+    
 
     @commands.command()
     async def days(self, ctx, days):

@@ -35,6 +35,7 @@ client.remove_command('help')
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 #token = open("/home/ec2-user/token.txt").read() linux
 
+names = ["011001100", "Pipikator25", "Themm"]
 
 @client.command()
 async def rules(ctx):
@@ -123,6 +124,20 @@ async def command(ctx):
     embed.add_field(name=".movie", value="Gives you random movie from IMDb TOP 250 Movies database (.movie)" )
     await ctx.send(embed=embed)
 
+
+@client.command()
+async def rl(ctx):
+    random_list = random.choice(names)
+    embed=discord.Embed(colour=0x520081,title="Rocket League Tournament", description=f"List: `{names}`\n__ __Random Choice: __**{random_list}**__")
+    embed.set_thumbnail(url="https://rocketleague.media.zestyio.com/rl_s2_core_1920x1080_no-logos.jpg")
+    await ctx.send(embed=embed)
+
+
+@client.command()
+async def addrl(ctx,new):
+    names.append(new)
+    await ctx.send(f"{new} was added to the list!")
+    
 
 @client.event 
 async def on_message(message):  # event that happens per any message.
