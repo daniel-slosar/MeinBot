@@ -33,7 +33,7 @@ client.remove_command('help')
 
 
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
-#token = open("/home/ec2-user/token.txt").read() linux
+#token = open("/home/ec2-user/token.txt").read() #linux
 
 names = ["011001100", "Pipikator25", "Themm"]
 

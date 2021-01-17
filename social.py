@@ -7,6 +7,7 @@ import lyricsgenius
 import instaloader
 
 token_genius = open("D:\\Python\\MeinBot\\genius_token.txt", "r").read()
+#token = open("/home/ec2-user/genius_token.txt").read() #linux
 
 class Social(commands.Cog):
 
