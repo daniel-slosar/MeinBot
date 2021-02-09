@@ -1,5 +1,6 @@
 import discord
 import json
+import requests
 from discord.ext import commands
 from googlesearch import search
 from google_currency import convert
@@ -63,6 +64,35 @@ class GoogleStuff(commands.Cog):
         if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = discord.Embed(title="Error", description=f"You need to specify amount and currency from and currency to `.currency 10 eur usd`",colour=0x520081)
             await ctx.send(embed=embed)
+
+    @commands.command()
+    async def crypto(self, ctx, symbol, curr : str="EUR"):
+        url = "https://alpha-vantage.p.rapidapi.com/query"
+        querystring = {"from_currency":{symbol},"function":"CURRENCY_EXCHANGE_RATE","to_currency":{curr}}
+        headers = {
+            'x-rapidapi-key': "0b8c1c5c4fmshc448a389a7ab420p1766b6jsn83528d6e5355",
+            'x-rapidapi-host': "alpha-vantage.p.rapidapi.com"
+        }
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        result = json.loads(response.text)         
+        currency_from = result['Realtime Currency Exchange Rate']['2. From_Currency Name']
+        currency_to = result['Realtime Currency Exchange Rate']['4. To_Currency Name']
+        ex_rate = result['Realtime Currency Exchange Rate']['5. Exchange Rate']
+        refresh = result['Realtime Currency Exchange Rate']['6. Last Refreshed']
+
+        embed = discord.Embed(title="Cryptocurrency",colour=0x520081)
+        embed.set_thumbnail(url="https://assets.entrepreneur.com/content/3x2/2000/20191217200727-6Crypto.jpeg")
+        embed.add_field(name=f"{currency_from}\t= ", value=f"1", inline=True)
+        embed.add_field(name=f"{currency_to}", value=f"{ex_rate}", inline=True)
+        embed.add_field(name="Last update: ", value=f"{refresh}", inline=False)
+        await ctx.send(embed=embed)
+
+    @crypto.error
+    async def currency_error(self, ctx, error):
+        if isinstance(error, commands.errors.MissingRequiredArgument):
+            embed = discord.Embed(title="Error", description=f"You need to specify cryptocurrency! Optional you can change currency.. `.crypto BTC USD` or just `.crypto BTC`",colour=0x520081)
+            await ctx.send(embed=embed)
+
 
     @commands.command(aliases=['t', 'tr', 'trns'])
     async def translate(self, ctx, word: str, scnd_l: str="en"):
