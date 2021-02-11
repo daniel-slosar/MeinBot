@@ -88,7 +88,7 @@ class GoogleStuff(commands.Cog):
         await ctx.send(embed=embed)
 
     @crypto.error
-    async def currency_error(self, ctx, error):
+    async def crypto_error(self, ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = discord.Embed(title="Error", description=f"You need to specify cryptocurrency! Optional you can change currency.. `.crypto BTC USD` or just `.crypto BTC`",colour=0x520081)
             await ctx.send(embed=embed)
