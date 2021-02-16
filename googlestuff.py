@@ -5,6 +5,8 @@ from discord.ext import commands
 from googlesearch import search
 from google_currency import convert
 from googletrans import Translator
+import matplotlib.pyplot as plt
+import pandas as pd
 
 class GoogleStuff(commands.Cog):
 
@@ -65,8 +67,9 @@ class GoogleStuff(commands.Cog):
             embed = discord.Embed(title="Error", description=f"You need to specify amount and currency from and currency to `.currency 10 eur usd`",colour=0x520081)
             await ctx.send(embed=embed)
 
+
     @commands.command()
-    async def crypto(self, ctx, symbol, curr : str="EUR"):
+    async def crypto(self,ctx, symbol, curr : str="EUR"):
         url = "https://alpha-vantage.p.rapidapi.com/query"
         querystring = {"from_currency":{symbol},"function":"CURRENCY_EXCHANGE_RATE","to_currency":{curr}}
         headers = {
@@ -80,12 +83,26 @@ class GoogleStuff(commands.Cog):
         ex_rate = result['Realtime Currency Exchange Rate']['5. Exchange Rate']
         refresh = result['Realtime Currency Exchange Rate']['6. Last Refreshed']
 
+        url = f"https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol={symbol}&market=EUR&apikey=0b8c1c5c4fmshc448a389a7ab420p1766b6jsn83528d6e5355&datatype=csv"
+        df = pd.read_csv(url)
+        df1 = df.iloc[::-1]
+        a = df1.plot(x="timestamp",y=["high (EUR)","low (EUR)"],legend={'reverse'},title=f"{symbol} price",grid=True,color=["Red", "Green"],label=["Highest[EUR]","Lowest[EUR]"])
+        a.set_facecolor('black')
+
+        ax1 = plt.axes()
+        ax1.xaxis.set_label_text('Dates')
+        ay1 = plt.axes()
+        ay1.yaxis.set_label_text("Price")
+
+        plt.savefig("crypto_price.png")
+        file=discord.File("crypto_price.png",filename="image.png")
+        
         embed = discord.Embed(title="Cryptocurrency",colour=0x520081)
-        embed.set_thumbnail(url="https://assets.entrepreneur.com/content/3x2/2000/20191217200727-6Crypto.jpeg")
-        embed.add_field(name=f"{currency_from}\t= ", value=f"1", inline=True)
+        embed.set_image(url="attachment://image.png")
+        embed.add_field(name=f"{currency_from}", value=f"1", inline=True)
         embed.add_field(name=f"{currency_to}", value=f"{ex_rate}", inline=True)
         embed.add_field(name="Last update: ", value=f"{refresh}", inline=False)
-        await ctx.send(embed=embed)
+        await ctx.send(file=file,embed=embed)
 
     @crypto.error
     async def crypto_error(self, ctx, error):

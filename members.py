@@ -81,9 +81,9 @@ class Members(commands.Cog):
     async def on_member_update(self, before, after):
         if before.raw_status == "offline" and after.raw_status == "online" and int(before.id) == 472502168738463755:
             user = self.client.get_user(373934947091742721)
-            member = self.client.get_user(472502168738463755)
+            member_o = self.client.get_user(472502168738463755)
             timenow = datetime.datetime.now()
-            await user.send(f"**```yaml\n{member} is Online!\nTime: {timenow.strftime('%R')}```**")
+            await user.send(f"**```yaml\n{member_o} is Online!\nTime: {timenow.strftime('%R')}```**")
 
     @commands.Cog.listener()
     async def on_member_join(self,member):

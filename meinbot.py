@@ -24,7 +24,8 @@ from itertools import cycle
 from asyncio import sleep
 #import lyricsgenius
 import math
-
+from urllib.request import urlopen
+import requests
 
 intents = discord.Intents.all()
 
