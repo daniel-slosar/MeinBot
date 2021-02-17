@@ -139,17 +139,21 @@ class Social(commands.Cog):
     @commands.command()
     async def insta(self, ctx, profile):
         try:
-            profile1 = profile
-            instg = instaloader.Instaloader()
-            profile = instaloader.Profile.from_username(instg.context, profile)
-            instg.context.get_and_write_raw(profile.profile_pic_url, "instagram.jpg")
-            embed = discord.Embed(title="Instagram Profile Picture", description=f"<https://www.instagram.com/{profile1}/>", color=0x520081) #creates embed
-            print(os.getcwd())
-            file = discord.File("instagram.jpg", filename="image.jpg")
-            embed.set_image(url="attachment://image.jpg")
-            await ctx.send(file=file, embed=embed)
-            #await ctx.channel.send(f"<https://www.instagram.com/{profile1}/>")
-            #await ctx.channel.send(file=discord.File('instagram.jpg'))
+            if profile == "slosar._.daniel":
+                await ctx.send(f"Hmm.. How about no you fucking cunt?")
+                pass
+            else:
+                profile1 = profile
+                instg = instaloader.Instaloader()
+                profile = instaloader.Profile.from_username(instg.context, profile)
+                instg.context.get_and_write_raw(profile.profile_pic_url, "instagram.jpg")
+                embed = discord.Embed(title="Instagram Profile Picture", description=f"<https://www.instagram.com/{profile1}/>", color=0x520081) #creates embed
+                print(os.getcwd())
+                file = discord.File("instagram.jpg", filename="image.jpg")
+                embed.set_image(url="attachment://image.jpg")
+                await ctx.send(file=file, embed=embed)
+                #await ctx.channel.send(f"<https://www.instagram.com/{profile1}/>")
+                #await ctx.channel.send(file=discord.File('instagram.jpg'))
         except Exception as e:
             #await ctx.channel.send(f"```Profile {profile1} does not exist```")
             await ctx.channel.send(f"```{e}```")
