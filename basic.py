@@ -29,7 +29,12 @@ class Basic(commands.Cog):
         await ctx.channel.purge(limit=1)
         for n in range(n):
             time.sleep(0.8)
-            await ctx.send(f"{user} poked by <@!{ctx.author.id}>")
+            await ctx.send(f"{user} poked by `{ctx.author}`")
+        time.sleep(5)
+        for n in range(n):
+            await ctx.channel.purge(limit=1)
+            time.sleep(1)
+            
 
     @commands.command()
     async def rand(self,ctx,s: int = 1 , e: int = 99):

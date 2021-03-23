@@ -39,6 +39,12 @@ token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 names = ["011001100", "Pipikator25", "Themm"]
 
 @client.command()
+async def commandslist(ctx):
+    embed = discord.Embed(title="Commands list",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="`.info` Returns basic info about bot\n\n`.userinfo @user` Returns basic info about user\n\n`.repeat LOL` Repeats the message \n\n`.poke @user 5` Mentions the @user n-times with delay\n\n`.rand 1 25` RND! You can specify interval <x,y>\n\n`.yn` Yes or No\n\n `.help` Help command\n\n")
+    await ctx.send(embed=embed)
+
+
+@client.command()
 async def rules(ctx):
     embed = discord.Embed(title="RULES!",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="READ THE RULES!\n\n**0000. Respect everyone.\n\n0001. Use channels properly.\n\n0010. Speak only English.\n\n0011. Do not spam.\n\n0100. Do not advertise.\n\n0101. Do not post anything NSFW or you'll get banned.\n\n0110. Do not swear or use abusive language.\n\n0111. Do not start conversation with controversial topics.\n\n1000. Do not mention @everyone.\n\n1001. Do not share any files for download.**\n\nAfter reading the rules confirm accepting them by reacting with :thumbsup:")
     await ctx.send(embed=embed)
@@ -76,7 +82,10 @@ async def q_error(ctx, error):
 
 @client.command()
 async def clear(ctx, amount : int=1):
-    await ctx.channel.purge(limit=amount + 1)
+    amount = amount + 1
+    for i in range(amount):
+        await ctx.channel.purge(limit=1)
+        time.sleep(0.8)
 
 @clear.error
 async def clear_error(ctx, error):
@@ -99,7 +108,7 @@ async def on_command_error(ctx,error):
         if x == '"BMI"':
             pass
         else:
-            embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.help`",colour=0x520081)
+            embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.commandslist` or `.help`",colour=0x520081)
             await ctx.send(embed=embed)
 
 
