@@ -147,14 +147,30 @@ async def rl(ctx):
 async def addrl(ctx,new):
     names.append(new)
     await ctx.send(f"{new} was added to the list!")
-    
+
+
+@client.command()
+async def delete(message, word):
+    def msg_is(message):
+        return message.content.count(word) >0
+
+    deleted = await message.channel.purge(limit=10000,check=msg_is)
+    await message.channel.send('Deleted {} message(s)'.format(len(deleted)))
+    await asyncio.sleep(5)
+    await message.channel.purge(limit=1)
+
 
 @client.event 
 async def on_message(message):  # event that happens per any message.
-    bad_words = ["oliver ma maly pipik", "daniel ma maly pipik"]
+    pokes = ["<@!373934947091742721>", "<@!472502168738463755>", "<@!763454651990409246>", "<@!459443831763632128>","<@!386529526479454223>", "<@!489171669257289739>","<@!336869445953912833>"]    
     await client.process_commands(message) 
     global meinbot_guild
     print(f"#{message.channel}: user {message.author}: {message.content}")
+    
+    for poke in pokes:
+        if message.content.count(poke)>0:
+            await message.delete(delay=3600)
+
 
     if message.content.startswith('.BMI'): #.BMI
         channel = message.channel
