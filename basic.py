@@ -26,15 +26,18 @@ class Basic(commands.Cog):
 
     @commands.command()
     async def poke(self, ctx,user,n: int=1):
+        def is_me(m):
+            return m.author == client.user
+        
         await ctx.channel.purge(limit=1)
         for n in range(n):
             time.sleep(0.8)
             await ctx.send(f"{user} poked by `{ctx.author}`")
         time.sleep(5)
         for n in range(n):
-            await ctx.channel.purge(limit=1)
+            await ctx.channel.purge(limit=1,check=is_me)
             time.sleep(1)
-            
+
 
     @commands.command()
     async def rand(self,ctx,s: int = 1 , e: int = 99):
