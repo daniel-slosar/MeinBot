@@ -36,7 +36,7 @@ class Modules(commands.Cog):
 
 
     @commands.command()
-    async def corona(self,ctx, krajina):
+    async def covid(self,ctx, krajina):
         global meinbot_guild
         try:
             covid = Covid(source="worldometers")
@@ -69,7 +69,7 @@ class Modules(commands.Cog):
             await ctx.channel.send(f"Cannot find this country, maybe try `.corona \"Dominican Republic\"` or try using `.countries`")
 
     @corona.error
-    async def corona_error(self,ctx, error):
+    async def covid_error(self,ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = discord.Embed(title="Error", description=f"You need to specify a country `.corona USA`",colour=0x520081)
             await ctx.send(embed=embed)
