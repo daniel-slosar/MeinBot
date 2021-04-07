@@ -39,8 +39,8 @@ token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 names = ["011001100", "Pipikator25", "Themm"]
 
 @client.command()
-async def commandslist(ctx):
-    embed = discord.Embed(title="Commands list",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="`.info` Returns basic info about bot\n\n`.userinfo @user` Returns basic info about user\n\n`.repeat LOL` Repeats the message \n\n`.poke @user 5` Mentions the @user n-times with delay\n\n`.rand 1 25` RND! You can specify interval <x,y>\n\n`.yn` Yes or No\n\n `.help` Help command\n\n")
+async def cmdlist(ctx):
+    embed = discord.Embed(title="Commands list",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="`.info` Returns basic info about bot\n\n`.userinfo @user` Returns basic info about user\n\n`.repeat LOL` Repeats the message \n\n`.poke @user 5` Mentions the @user n-times with delay\n\n`.clear 10` Clears 10 messages\n\n`.rand 1 25` RND! You can specify interval <x,y>\n\n`.covid US` Latest COVID-19 update\n\n`.movie` Picks random movie from IMDB TOP 250 Movies \n\n `.help` Help command\n\n")
     await ctx.send(embed=embed)
 
 
@@ -85,7 +85,7 @@ async def clear(ctx, amount : int=1):
     amount = amount + 1
     for i in range(amount):
         await ctx.channel.purge(limit=1)
-        time.sleep(0.8)
+        await asyncio.sleep(0.8)
 
 @clear.error
 async def clear_error(ctx, error):
@@ -108,7 +108,7 @@ async def on_command_error(ctx,error):
         if x == '"BMI"':
             pass
         else:
-            embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.commandslist` or `.help`",colour=0x520081)
+            embed = discord.Embed(title="Command Error", description=f"Command does not exist! Try `.cmdlist` or `.help`",colour=0x520081)
             await ctx.send(embed=embed)
 
 
@@ -125,7 +125,7 @@ async def command(ctx):
     embed.add_field(name=".userinfo", value="Shows info about user (.userinfo @user)")
     embed.add_field(name=".clear", value="Delete certain amount of messages (.clear 5)")
     embed.add_field(name=".q", value="Ask your troubling questions and bot will reply")
-    embed.add_field(name=".corona", value="Gives you corona update(.corona US/Slovakia/Czechia)")
+    embed.add_field(name=".covid", value="Gives you corona update(.corona US/Slovakia/Czechia)")
     embed.add_field(name=".countries", value="Gives you link to all countries")
     embed.add_field(name=".translate", value="Translator from detected language to english (.translate Okno)")
     embed.add_field(name=".google", value="Googles for you, shows you first 3 searches on google (.google cafe Paris)")
@@ -141,6 +141,21 @@ async def rl(ctx):
     embed=discord.Embed(colour=0x520081,title="Rocket League Tournament", description=f"List: `{names}`\n__ __Random Choice: __**{random_list}**__")
     embed.set_thumbnail(url="https://rocketleague.media.zestyio.com/rl_s2_core_1920x1080_no-logos.jpg")
     await ctx.send(embed=embed)
+
+
+@client.command()
+async def poke(ctx,user,n: int=1):
+    def is_me(m):
+        return m.author == client.user
+        
+    await ctx.channel.purge(limit=1)
+    for n in range(n):
+        await asyncio.sleep(0.8)
+        await ctx.send(f"{user} poked by `{ctx.author}`")
+    await asyncio.sleep(5)
+    for n in range(n):
+        await ctx.channel.purge(limit=1,check=is_me)
+        await asyncio.sleep(1)
 
 
 @client.command()
