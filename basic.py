@@ -24,19 +24,19 @@ class Basic(commands.Cog):
             embed = discord.Embed(title="Error", description=f"What should I repeat? `.repeat Hello!`",colour=0x520081)
             await ctx.send(embed=embed)
 
-    @commands.command()
+    '''@commands.command()
     async def poke(self, ctx,user,n: int=1):
-        def is_me(m):
-            return m.author == client.user
-        
+        def is_me(self,m):
+            return m.author == self.client.user
+            
         await ctx.channel.purge(limit=1)
         for n in range(n):
             time.sleep(0.8)
             await ctx.send(f"{user} poked by `{ctx.author}`")
-        time.sleep(5)
+        await asyncio.sleep(5)
         for n in range(n):
             await ctx.channel.purge(limit=1,check=is_me)
-            time.sleep(1)
+            await asyncio.sleep(1)'''
 
 
     @commands.command()
@@ -44,11 +44,6 @@ class Basic(commands.Cog):
         r = random.randint(s,e)
         await ctx.send(f"```css\nRandom Number: {r}```")
 
-    @commands.command()
-    async def yn(self, ctx, n: int=1):
-        choices = ['Yes', 'No']
-        for i in range(n):
-            await ctx.send(f"```css\n{random.choice(choices)}```")
 
 def setup(client):
     client.add_cog(Basic(client))
