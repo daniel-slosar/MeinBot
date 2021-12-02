@@ -33,6 +33,7 @@ MeinBot is a discord bot that can make almost anything! Well.. not anything but 
 
 [![](https://img.shields.io/badge/Invitation%20link-blueviolet?style=for-the-badge&link=https://discord.com/api/oauth2/authorize?client_id=573091512066375690&permissions=8&scope=bot&logoColor=blueviolet)](https://discord.com/api/oauth2/authorize?client_id=573091512066375690&permissions=8&scope=bot)
 
+[![](https://img.shields.io/badge/Website-blueviolet?style=for-the-badge&link=https://daydream404.github.io/MeinBot/)](https://daydream404.github.io/MeinBot/)
 
 
 
