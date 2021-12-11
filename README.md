@@ -4,7 +4,7 @@
 # MeinBot
 
 
-<img align="center" src="https://southpark-online.nl/assets/images/clips/cartmans-rally.jpg">
+<img align="center" src="mb-logo1.jpg">
 
 </br>
 </br>
