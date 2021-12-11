@@ -4,7 +4,7 @@
 # MeinBot
 
 
-<img align="center" src="mb-logo1.jpg">
+<img align="center" src="mb-logo1.jpg" style="border-radius: 50%;">
 
 </br>
 </br>
