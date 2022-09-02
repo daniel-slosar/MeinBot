@@ -13,7 +13,7 @@ import textwrap
 import qrcode
 import shutil
 #from covid import Covid
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.utils import get
 from discord.voice_client import VoiceClient
 from discord import FFmpegPCMAudio
@@ -36,11 +36,11 @@ client.remove_command('help')
 token = open("D:\\Python\\MeinBot\\token.txt", "r").read() #windows
 #token = open("/home/ec2-user/token.txt").read() #linux
 
-names = ["011001100", "Pipikator25", "Themm"]
+names = ["Player1", "Player2", "Player3"]
 
 @client.command()
 async def cmdlist(ctx):
-    embed = discord.Embed(title="Commands list",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="`.info` Returns basic info about bot\n\n`.userinfo @user` Returns basic info about user\n\n`.repeat LOL` Repeats the message \n\n`.poke @user 5` Mentions the @user n-times with delay\n\n`.clear 10` Clears 10 messages\n\n`.rand 1 25` RND! You can specify interval <x,y>\n\n`.covid US` Latest COVID-19 update\n\n`.movie` Picks random movie from IMDB TOP 250 Movies \n\n `.help` Help command\n\n")
+    embed = discord.Embed(title="Commands list",colour=0xff0000,url="https://daydream404.github.io/MeinBot/",description="`.info` Returns basic info about bot\n\n`.userinfo @user` Returns basic info about user\n\n`.repeat LOL` Repeats the message \n\n`.poke @user 5` Mentions the @user n-times with delay\n\n`.clear 10` Clears 10 messages\n\n`.rand 1 25` RND! You can specify interval <x,y>\n\n`.covid USA` Latest COVID-19 update\n\n`.movie` Picks random movie from IMDB TOP 250 Movies \n\n `.help` Help command\n\n")
     await ctx.send(embed=embed)
 
 
@@ -55,6 +55,7 @@ async def help(ctx):
 	embed=discord.Embed(colour=0x520081,title="MeinBot Help",url="https://daydream404.github.io/MeinBot/", description=":tools:  Commands list [here](https://daydream404.github.io/MeinBot/)\n\n :interrobang:  Any questions? [FAQ](https://daydream404.github.io/MeinBot/)\n\n:desktop:  Join our Discord! [Discord server](https://discord.gg/PjYewPngVe)")
 	embed.set_thumbnail(url=client.user.avatar_url)
 	await ctx.send(embed=embed)
+
 
 
 @client.command()
@@ -116,6 +117,7 @@ async def on_command_error(ctx,error):
 async def on_ready():
     global meinbot_guild
     print(f"You've logged in as: {client.user}")
+    nasa.start()
     await client.change_presence(activity=discord.Game("with your sister"))
 
 
@@ -125,7 +127,7 @@ async def command(ctx):
     embed.add_field(name=".userinfo", value="Shows info about user (.userinfo @user)")
     embed.add_field(name=".clear", value="Delete certain amount of messages (.clear 5)")
     embed.add_field(name=".q", value="Ask your troubling questions and bot will reply")
-    embed.add_field(name=".covid", value="Gives you corona update(.corona US/Slovakia/Czechia)")
+    embed.add_field(name=".covid", value="Gives you corona update(.corona USA/Slovakia/Czechia)")
     embed.add_field(name=".countries", value="Gives you link to all countries")
     embed.add_field(name=".translate", value="Translator from detected language to english (.translate Okno)")
     embed.add_field(name=".google", value="Googles for you, shows you first 3 searches on google (.google cafe Paris)")
@@ -141,6 +143,19 @@ async def rl(ctx):
     embed=discord.Embed(colour=0x520081,title="Rocket League Tournament", description=f"List: `{names}`\n__ __Random Choice: __**{random_list}**__")
     embed.set_thumbnail(url="https://rocketleague.media.zestyio.com/rl_s2_core_1920x1080_no-logos.jpg")
     await ctx.send(embed=embed)
+
+
+@tasks.loop(seconds=60)
+async def doge():
+    user = client.get_user(373934947091742721)
+    member = client.get_user(373934947091742721)
+    r = requests.get('https://api.binance.com/api/v3/ticker/price').json()
+    price = r[803]['price']
+    real_price = float(price) * 1.998
+    show_price = real_price*0.89
+    if real_price > 5 and member.status == discord.Status.online:
+        await user.send(show_price)
+        
 
 
 @client.command()
@@ -236,6 +251,21 @@ async def exit(ctx):
     await ctx.channel.purge(limit=1)    
     await client.close()
 
+
+@tasks.loop(seconds=86400)
+async def nasa():
+    channel = client.get_channel(880755446087057408)
+    url = "https://api.nasa.gov/planetary/apod?api_key=5DRIi08TOQvqdb77QYcpaR86yHUaxl26fzypMiz8"
+    r = requests.get(url)
+    if r.status_code != 200:
+        return
+
+    picture_url= r.json()['url']
+    if 'jpg' not in picture_url:
+        print("No image for today!")
+    else:
+        pic = requests.get(picture_url, allow_redirects=True)
+        await channel.send(picture_url)
 
 #loading cogs
 extensions = ['googlestuff','social','basic','modules','members']

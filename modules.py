@@ -68,7 +68,7 @@ class Modules(commands.Cog):
         except:
             await ctx.channel.send(f"Cannot find this country, maybe try `.corona \"Dominican Republic\"` or try using `.countries`")
 
-    @corona.error
+    @covid.error
     async def covid_error(self,ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
             embed = discord.Embed(title="Error", description=f"You need to specify a country `.corona USA`",colour=0x520081)
