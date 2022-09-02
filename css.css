@@ -1,0 +1,158 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background:black;
+  font-size: 28px;
+  font-family: 'Righteous', cursive;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: white; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #35393b;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
+@media screen and (max-width: 700px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+code {
+  background-color: rgba(44, 44, 44, 0.253);
+  border-radius: 3px;
+  font-family: 'Righteous', cursive;
+  padding: 0 3px;
+  color:black;
+}
+
+img {
+    display: block;
+}
+
+
+
+p {
+  font-size: 20px;
+  text-align: center;
+  background-color: red;
+  
+  /* Create the gradient. */
+  background-image: linear-gradient(45deg, #C822FF, #1A6DFF);
+  
+  /* Set the background size and repeat properties. */
+  background-size: 100%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+
+#ftr {
+  text-align: left;
+  padding: 17px 25px;
+  color: white;
+}
+
+.titles{
+  font-size: 30px;
+  text-align: center;
+  background-color: red;
+  
+  /* Create the gradient. */
+  background-image: linear-gradient(45deg, #C822FF, #1A6DFF);
+  
+  /* Set the background size and repeat properties. */
+  background-size: 100%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+
+
+
+
+.dfrntback{
+  background-color: white;
+}
+
+
+.btnsgrad{
+  background-color: red;
+  
+  /* Create the gradient. */
+  background-image: linear-gradient(45deg, #C822FF, #1A6DFF);
+  
+  /* Set the background size and repeat properties. */
+  background-size: 100%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+
+.center {
+  margin: auto;
+  width: 60%;
+  border: 3px solid white;
+  border-radius: 30px;
+  padding: 5px;
+  text-align: center;
+}
+
+.pfaq{
+  width:60%;
+  margin:auto;
+  padding:5px;
+}
+
+
+
+i {
+  color:white;
+  margin: 3px;
+}
+
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
