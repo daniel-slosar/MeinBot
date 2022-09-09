@@ -49,7 +49,7 @@ MeinBot is a discord bot that can make almost anything! Well.. not anything but 
 
 
 ```py
-$ git clone https://github.com/Daydream404/MeinBot.git
+$ git clone https://github.com/daniel-slosar/MeinBot.git
 
 $ pip install -r requirements.txt
 ```
